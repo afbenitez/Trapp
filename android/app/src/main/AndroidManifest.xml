@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trap">
+    package="com.example.trapp_flutter">
    <application
-        android:label="trap"
+        android:label="trapp_flutter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

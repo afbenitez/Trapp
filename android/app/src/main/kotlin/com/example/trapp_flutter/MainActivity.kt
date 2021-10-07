@@ -1,4 +1,4 @@
-package com.example.trap
+package com.example.trapp_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
