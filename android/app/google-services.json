@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "13840337353",
+    "project_id": "trapp-f9ea1",
+    "storage_bucket": "trapp-f9ea1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13840337353:android:20df4465add12c719cc018",
+        "android_client_info": {
+          "package_name": "com.example.trapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13840337353-mnbde9688l32bkm2321dgg278r72e63i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmxP4praIGrxXasKWCxQDlixeTp_QyRdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13840337353-mnbde9688l32bkm2321dgg278r72e63i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13840337353:android:b5e164e0fdb2522f9cc018",
+        "android_client_info": {
+          "package_name": "com.example.trapp_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13840337353-mnbde9688l32bkm2321dgg278r72e63i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmxP4praIGrxXasKWCxQDlixeTp_QyRdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13840337353-mnbde9688l32bkm2321dgg278r72e63i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
