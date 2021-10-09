@@ -22,14 +22,14 @@ class Home extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: _content(),
+        body: _content(context),
 
       ),
 
     );
   }
 
-  Widget _content() {
+  Widget _content(context) {
     return Padding(padding: EdgeInsets.all(22),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +71,12 @@ class Home extends StatelessWidget {
                         SizedBox(
                           height: 25,
                         ),
-                        RaisedButton(onPressed: () {},
+                        RaisedButton(onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignIn(toggleView: (){})),
+                          );
+                        },
                             color: Color(0xff00AFB9),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
@@ -82,7 +87,12 @@ class Home extends StatelessWidget {
                         SizedBox(
                           height: 0.9,
                         ),
-                        RaisedButton(onPressed: () {},
+                        RaisedButton(onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUp(toggleView: (){})),
+                          );
+                        },
                             color: Color(0xffEDD83D),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
