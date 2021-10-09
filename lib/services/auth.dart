@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class AuthService {
   //Private property for access all the different methods of authentication
@@ -28,8 +29,30 @@ class AuthService {
   }
 
   //sign in email & password
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+      return user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   //register email & password
+  Future registerWithEmailAndPassword(String email, String password, String name) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+      // create a new document for the user with the uid
+      await UserService(uid: user!.uid).updateUserData(name);
+      return _userFromFbUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   //sign out
   Future signOut() async {
