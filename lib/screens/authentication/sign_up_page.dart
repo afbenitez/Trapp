@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/services/auth.dart';
 class SignUp extends StatefulWidget {
-
-  final Function toggleView;
-  SignUp({ required this.toggleView });
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -25,7 +23,7 @@ class _RegisterState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/imgSignUp.jpeg'),
             fit: BoxFit.cover,
@@ -44,14 +42,14 @@ class _RegisterState extends State<SignUp> {
   Widget _content(){
     return
     Container(
-      padding: EdgeInsets.all(22),
+      padding: const EdgeInsets.all(22),
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 100.0,
               child: Text("Join Us!",
                 textAlign: TextAlign.center,
@@ -60,16 +58,16 @@ class _RegisterState extends State<SignUp> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.account_circle_rounded, color: Colors.grey),
-                border: OutlineInputBorder(
+                prefixIcon: const Icon(Icons.account_circle_rounded, color: Colors.grey),
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                 ),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                     borderSide: BorderSide(
                       color: Colors.grey,
@@ -90,12 +88,12 @@ class _RegisterState extends State<SignUp> {
                 setState(() => email = val);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFormField(
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.view_compact_outlined, color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -121,7 +119,7 @@ class _RegisterState extends State<SignUp> {
                 setState(() => password = val);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             RaisedButton(onPressed: ()async {
@@ -134,9 +132,11 @@ class _RegisterState extends State<SignUp> {
                     loading = false;
                     error = 'Please supply a valid email';
                   });
+                }else{
+                  Navigator.pop(context);
                 }
               }
-            }, color: Color(0xff00AFB9), shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))) ,child: Center(child: Text('Sign In', style: TextStyle( color: Color(0xffF3F9E3)),)))
+            }, color: const Color(0xff00AFB9), shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))) ,child: const Center(child: Text('Sign In', style: TextStyle( color: Color(0xffF3F9E3)),)))
           ]
 
         )

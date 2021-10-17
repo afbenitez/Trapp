@@ -18,37 +18,38 @@ class RecommendationsWidget extends StatelessWidget {
         const Divider(
           thickness: 1,
         ),
-        TitleRecomended(
-          title: 'Recomended for you',
+        const TitleRecomended(
+          title: 'Recommended for you',
         ),
         StreamBuilder<List<Trip>>(
             stream: getData(context),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data != null) {
-                return Container(
+                return SizedBox(
                   height: 250,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data!.length,
                     itemBuilder: (_, index) => Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: ProductCard(
                         data: snapshot.data![index],
                       ),
                     ),
                   ),
                 );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(width: 10),
+                      Text("Loading..."),
+                    ],
+                  ),
+                );
               }
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: const [
-                    CircularProgressIndicator(),
-                    SizedBox(width: 10),
-                    Text("Loading..."),
-                  ],
-                ),
-              );
             }),
         const Divider(
           thickness: 3,
