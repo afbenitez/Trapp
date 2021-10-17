@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:trapp_flutter/models/trip.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({ required this.data, Key? key, }) : super(key: key);
+  const ProductCard({
+    required this.data,
+    Key? key,
+  }) : super(key: key);
 
   final Trip data;
   @override
@@ -29,7 +32,8 @@ class ProductCard extends StatelessWidget {
           data.name,
         ),
         const SizedBox(height: 10),
-        Row( //Reviews count
+        Row(
+          //Reviews count
           children: [
             Row(
               children: [
@@ -120,7 +124,11 @@ class Ratings extends StatelessWidget {
         color: Colors.lightGreen, size: 15);
     return Row(
       children: [
-        _icon,        _icon,        _icon,        _icon,        Icon(rating != null ? Icons.star : Icons.star_outline,
+        _icon,
+        _icon,
+        _icon,
+        _icon,
+        Icon(rating != null ? Icons.star : Icons.star_outline,
             color: Colors.grey, size: 15),
         const SizedBox(width: 4),
         Text(

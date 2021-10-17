@@ -8,8 +8,10 @@ import 'package:trapp_flutter/services/database.dart';
 
 final AuthService _auth = AuthService();
 
-class HomeLogged extends StatelessWidget {
-  const HomeLogged({Key? key}) : super(key: key);
+class RecommendedTrips extends StatelessWidget {
+  const RecommendedTrips({Key? key}) : super(key: key);
+
+  final int selected = 0;
 
   @override
   Widget build(BuildContext context) {
