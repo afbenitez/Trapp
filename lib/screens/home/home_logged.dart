@@ -11,6 +11,8 @@ final AuthService _auth = AuthService();
 class HomeLogged extends StatelessWidget {
   const HomeLogged({Key? key}) : super(key: key);
 
+  final int selected = 0;
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Trip>?>.value(

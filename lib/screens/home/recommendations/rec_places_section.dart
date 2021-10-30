@@ -13,7 +13,7 @@ class RecPlacesWidget extends StatelessWidget {
     final trips = Provider.of<List<Trip>?>(context);
 
     return (trips == null)
-        ? const Text('Loading')
+        ? const CircularProgressIndicator()
         : SizedBox(
             height: 250,
             child: ListView.builder(

@@ -32,9 +32,8 @@ dependencies:
   firebase_core: ^1.7.0
   firebase_auth: ^3.1.3
   cloud_firestore: ^2.5.3
-  floating_bottom_navigation_bar: ^1.5.2
   provider: ^6.0.1
-  dot_navigation_bar:
+  location: ^4.2.0
   flutter_neumorphic:
     git:
       url: https://github.com/tsvillain/Flutter-Neumorphic.git

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/models/trip.dart';
-import 'package:trapp_flutter/models/trip_fb.dart';
 import 'package:trapp_flutter/screens/home/recommendations/sample_data.dart';
 import 'package:trapp_flutter/screens/home/recommendations/widgets/product_card.dart';
 import 'package:trapp_flutter/screens/home/recommendations/widgets/titlebar.dart';
