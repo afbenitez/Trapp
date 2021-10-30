@@ -11,8 +11,6 @@ final AuthService _auth = AuthService();
 class RecommendedTrips extends StatelessWidget {
   const RecommendedTrips({Key? key}) : super(key: key);
 
-  final int selected = 0;
-
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Trip>?>.value(
@@ -20,26 +18,13 @@ class RecommendedTrips extends StatelessWidget {
       value: DatabaseService().trips,
       child: Scaffold(
         backgroundColor: Colors.lightBlueAccent[50],
-        appBar: AppBar(
-          title: const Text('Home Trapp'),
-          backgroundColor: Colors.lightBlueAccent[300],
-          elevation: 0.0,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
         body: SingleChildScrollView(
           child: Column(
             children: const <Widget>[
               SizedBox(height: 15,),
               RecommendationsWidget(),
+
               RecPlacesWidget(),
-              // PlacesRecomendedWidget(),
             ],
           ),
         ),

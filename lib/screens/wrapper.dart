@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
+import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
 import 'package:trapp_flutter/screens/home/home.dart';
 import 'package:trapp_flutter/screens/home/neu_home.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
@@ -30,9 +31,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     NHome(),
-    Text(
-      'Index 1: Business',
-    ),
+    LoadingTrips(),
     RecommendedTrips(),
     Settings(),
   //  Items() por ejemplo
