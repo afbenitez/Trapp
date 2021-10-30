@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
+import 'package:trapp_flutter/screens/budget/budget.dart';
 import 'package:trapp_flutter/screens/home/home.dart';
 import 'package:trapp_flutter/screens/home/neu_home.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
@@ -27,14 +28,29 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerProviderStateMixin{
+
+  late TabController _tabController;
+
+  void initState(){
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  void dispose(){
+    super.dispose();
+    _tabController.dispose();
+  }
+
   int _selectedIndex = 0;
+
   static const List<Widget> _widgetOptions = <Widget>[
     NHome(),
     LoadingTrips(),
     RecommendedTrips(),
     Settings(),
-  //  Items() por ejemplo
+    Budget(),
+    //  Items() por ejemplo
   ];
 
   void _onItemTapped(int index) {
@@ -66,6 +82,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.monetization_on),
+            label: 'Budget',
           ),
         ],
         currentIndex: _selectedIndex,
