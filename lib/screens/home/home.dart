@@ -71,9 +71,9 @@ class Home extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          SignIn(toggleView: () {
-                                            // Navigator.pop(context);
-                                          })),
+                                      // const Text("Test"),
+                                          const SignIn()
+                                  ),
                                 );
                               },
                               color: const Color(0xff00AFB9),
@@ -93,7 +93,10 @@ class Home extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUp(toggleView: (){},)),
+                                      builder: (context) =>
+                                      // const Text("Test signup")
+                                      const SignUp()
+                                  ),
                                 );
                               },
                               color: const Color(0xffEDD83D),

@@ -3,17 +3,14 @@ import 'package:trapp_flutter/services/auth.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SignIn extends StatefulWidget {
-
-  final Function toggleView;
-  SignIn({ required this.toggleView });
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
-
-  final AuthService _auth  = AuthService();
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
   bool loading = false;
@@ -25,25 +22,23 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/imgSignIn.jpeg'),
             fit: BoxFit.cover,
           ),
-      ),
-      child:
-        Scaffold(
+        ),
+        child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: _content(),
           ),
-        )
-    );
+        ));
   }
 
-  Widget _content(){
+  Widget _content() {
     return Container(
-      padding: EdgeInsets.all(22),
+      padding: const EdgeInsets.all(22),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -52,20 +47,20 @@ class _SignInState extends State<SignIn> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Center(
-              child: Text(
-                'TRAPP',
-                style: TextStyle(
-                  fontFamily: 'trapp',
-                  fontSize:MediaQuery.of(context).size.width/4,
+                child: Text(
+                  'TRAPP',
+                  style: TextStyle(
+                    fontFamily: 'trapp',
+                    fontSize: MediaQuery.of(context).size.width / 4,
+                  ),
                 ),
               ),
-            ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Container(
-                padding: EdgeInsets.all(34),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(34),
+                decoration: const BoxDecoration(
                     color: Color(0xffF3F3F3),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     boxShadow: [
@@ -74,52 +69,55 @@ class _SignInState extends State<SignIn> {
                         spreadRadius: 3,
                         blurRadius: 10,
                       )
-                    ]
-                ),
+                    ]),
                 child: Column(
                   children: [
-                    Positioned(child: Text("Welcome!",
-                      style: TextStyle(
-                        fontFamily: 'thaBold',
-                        fontSize: MediaQuery.of(context).size.width/7,
-                        color: Color(0xff7B767D),
-                      ),),
-                      top: 550,),
-                    SizedBox(
+                    Positioned(
+                      child: Text(
+                        "Welcome!",
+                        style: TextStyle(
+                          fontFamily: 'thaBold',
+                          fontSize: MediaQuery.of(context).size.width / 7,
+                          color: const Color(0xff7B767D),
+                        ),
+                      ),
+                      top: 550,
+                    ),
+                    const SizedBox(
                       height: 40,
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.account_circle_rounded, color: Colors.grey),
-                        border: OutlineInputBorder(
+                        prefixIcon: const Icon(Icons.account_circle_rounded,
+                            color: Colors.grey),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide: BorderSide(
                               color: Colors.grey,
-                            )
-                        ),
-                        disabledBorder: OutlineInputBorder(
+                            )),
+                        disabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        focusedErrorBorder: OutlineInputBorder(
+                        focusedErrorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
@@ -131,24 +129,27 @@ class _SignInState extends State<SignIn> {
                           color: Colors.grey.shade50,
                         ),
                       ),
-                      validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+                      validator: (val) =>
+                          val!.isEmpty ? 'Enter an email' : null,
                       onChanged: (val) {
                         setState(() {
                           email = val;
                         });
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
                       obscureText: true,
-                      validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
+                      validator: (val) => val!.length < 6
+                          ? 'Enter a password 6+ chars long'
+                          : null,
                       onChanged: (val) {
                         setState(() => password = val);
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.password, color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -157,8 +158,7 @@ class _SignInState extends State<SignIn> {
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide: BorderSide(
                               color: Colors.grey,
-                            )
-                        ),
+                            )),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
@@ -190,36 +190,42 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     RaisedButton(
                       onPressed: () async {
-                        if(_formKey.currentState!.validate()){
+                        if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
-                          dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                          if(result == null) {
+                          dynamic result = await _auth
+                              .signInWithEmailAndPassword(email, password);
+                          if (result == null) {
                             setState(() {
                               loading = false;
-                              error = 'Could not sign in with those credentials';
+                              error =
+                                  'Could not sign in with those credentials';
                             });
-                          }else{
+                          } else {
                             Navigator.pop(context);
                           }
                         }
                       },
-                      color: Color(0xff00AFB9),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-
-                      child: Center(child: Text('Sign In', style: TextStyle( color: Color(0xffF3F9E3)),),),
+                      color: const Color(0xff00AFB9),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: const Center(
+                        child: Text(
+                          'Sign In',
+                          style: TextStyle(color: Color(0xffF3F9E3)),
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 12.0),
-                      Text(
+                    const SizedBox(height: 12.0),
+                    Text(
                       error,
-                      style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      style: const TextStyle(color: Colors.red, fontSize: 14.0),
                     ),
                   ],
                 ),
               ),
-
             ],
           ),
         ),

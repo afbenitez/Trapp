@@ -61,12 +61,12 @@ class _RegisterState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Container(
-                padding: EdgeInsets.all(34),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(34),
+                decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     boxShadow: [
@@ -83,7 +83,7 @@ class _RegisterState extends State<SignUp> {
                       style: TextStyle(
                         fontFamily: 'thaBold',
                         fontSize: MediaQuery.of(context).size.width/6,
-                        color: Color(0xff7B767D),
+                        color: const Color(0xff7B767D),
                       ),),
                       top: 550,),
                     const SizedBox(
@@ -101,25 +101,25 @@ class _RegisterState extends State<SignUp> {
                               color: Colors.grey,
                             )
                         ),
-                        disabledBorder: OutlineInputBorder(
+                        disabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        focusedErrorBorder: OutlineInputBorder(
+                        focusedErrorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
@@ -155,25 +155,25 @@ class _RegisterState extends State<SignUp> {
                               color: Colors.grey,
                             )
                         ),
-                        disabledBorder: OutlineInputBorder(
+                        disabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
                           ),
                         ),
-                        focusedErrorBorder: OutlineInputBorder(
+                        focusedErrorBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
                             color: Colors.grey,
