@@ -6,7 +6,7 @@ class ItemService {
 
 
   final CollectionReference itemsCollection =
-  FirebaseFirestore.instance.collection('items');
+    FirebaseFirestore.instance.collection('items');
 
 
   List<Stream<Item>> getItems(List<DocumentReference> entities) {

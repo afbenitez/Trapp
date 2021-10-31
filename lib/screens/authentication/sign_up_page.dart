@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trapp_flutter/models/dailyExpenses.dart';
 import 'package:trapp_flutter/services/auth.dart';
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -18,6 +19,12 @@ class _RegisterState extends State<SignUp> {
   String email = '';
   String password = '';
   String name = '';
+  String lastName = '';
+  String phone = '';
+  String birthday = '';
+  String gender = '';
+  List dailyExpenses = [];
+  List userGroups = [];
 
 
   @override
@@ -256,7 +263,7 @@ class _RegisterState extends State<SignUp> {
                       if (_formKey.currentState!.validate()) {
                         setState(() => loading = true);
                         dynamic result = await _auth.registerWithEmailAndPassword(
-                            email, password, name);
+                            email, password, name, lastName, phone, birthday, gender, dailyExpenses, userGroups);
                         if (result == null) {
                           setState(() {
                             loading = false;
