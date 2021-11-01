@@ -6,10 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 import 'package:trapp_flutter/screens/budget/heading.dart';
-import 'package:trapp_flutter/services/auth.dart';
 import 'package:trapp_flutter/services/user_service.dart';
-
-final AuthService _auth = AuthService();
 
 class Budget extends StatelessWidget {
   const Budget({Key? key}) : super(key: key);
@@ -22,9 +19,9 @@ class Budget extends StatelessWidget {
   Widget circularBar(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffEEEEEE),
+        backgroundColor: const Color(0xffEEEEEE),
         body: SingleChildScrollView(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Center(
               child: Column(
                 children: <Widget>[
@@ -32,7 +29,7 @@ class Budget extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 35,
                   ),
-                  enterBudget(),
+                  const EnterBudget(),
                 ],
               ),
             )),
@@ -41,14 +38,14 @@ class Budget extends StatelessWidget {
   }
 }
 
-class enterBudget extends StatefulWidget {
-  const enterBudget({Key? key}) : super(key: key);
+class EnterBudget extends StatefulWidget {
+  const EnterBudget({Key? key}) : super(key: key);
 
   @override
-  _enterBudgetState createState() => _enterBudgetState();
+  _EnterBudgetState createState() => _EnterBudgetState();
 }
 
-class _enterBudgetState extends State<enterBudget> {
+class _EnterBudgetState extends State<EnterBudget> {
   int counter = 0;
   String userId = '';
   int _dayNumber = 0;
@@ -65,76 +62,87 @@ class _enterBudgetState extends State<enterBudget> {
   var birthday = '';
   var gender = '';
 
+  @override
   void initState() {
     super.initState();
     fetchUserInfo();
   }
 
-  fetchUserInfo() async {
+  fetchUserInfo() {
     User? getUser = FirebaseAuth.instance.currentUser;
     userId = getUser!.uid;
-    var document = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .snapshots();
-    document.forEach((element) {
-      firstName = element['firstName'];
-      lastName = element['lastName'];
-      email = element['email'];
-      phone = element['phone'];
-      birthday = element['birthday'];
-      gender = element['gender'];
-      _dailyExpensesList = element['dailyExpenses'];
+    var document =
+        FirebaseFirestore.instance.collection('users').doc(userId);
+    document.get().then((u) {
+      setState(() {
+        firstName = u.get('firstName');
+        lastName = u.get('lastName');
+        email = u.get('email');
+        phone = u.get('phone');
+        birthday = u.get('birthday');
+        gender = u.get('gender');
+        _dailyExpensesList = u.get('dailyExpenses');
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-          Neumorphic(
-            child: RaisedButton(
-              child: Text(
-                '+',
-                style: TextStyle(
-                  color: Color(0xffF3F9E3),
-                  fontFamily: 'thaBold',
+    return (_dailyExpensesList.isEmpty)
+        ? const CircularProgressIndicator()
+        : Column(
+            children: [
+              Neumorphic(
+                child: RaisedButton(
+                  child: const Text(
+                    '+',
+                    style: TextStyle(
+                      color: Color(0xffF3F9E3),
+                      fontFamily: 'thaBold',
+                    ),
+                  ),
+                  onPressed: () async {
+                    await addDailyBudget(context);
+                  },
+                  color: const Color(0xff00AFB9),
                 ),
               ),
-              onPressed: () async {
-                   await addDailyBudget(context);
-                 },
-              color: Color(0xff00AFB9),
-            ),
-          ),
-        //Esto es lo que se debe modificar en donde dice 'day 1' debe ir el 'dayNumber',
-        //y donde dice '900' debe ir 'amount'
-        LinearPercentIndicator(
-          progressColor: Color(0xff00AFB9),
-          backgroundColor: Colors.transparent,
-          lineHeight: 10,
-          percent: 200000 / 2000000,
-          animation: true,
-          animationDuration: 4000,
-          leading: Text(
-            'day 1',
-            style: TextStyle(
-              fontFamily: 'thaRegular',
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-          trailing: Text(
-            '900',
-            style: TextStyle(
-              fontFamily: 'thaRegular',
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ],
-    );
+              //TODO Esto es lo que se debe modificar en donde dice 'day 1' debe ir el 'dayNumber', y donde dice '900' debe ir 'amount'
+              SizedBox(
+                height: 500,
+                child: ListView.builder(
+                  itemCount: _dailyExpensesList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return LinearPercentIndicator(
+                      progressColor: const Color(0xff00AFB9),
+                      backgroundColor: Colors.transparent,
+                      lineHeight: 10,
+                      percent: _dailyExpensesList[index]['amount'] / 20000,
+                      animation: true,
+                      animationDuration: 500,
+                      leading: Text(
+                        '${_dailyExpensesList[index]['dayNumber']}',
+                        // ',',
+                        style: const TextStyle(
+                          fontFamily: 'thaRegular',
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      trailing: Text(
+                        '${_dailyExpensesList[index]['amount']}',
+                        style: const TextStyle(
+                          fontFamily: 'thaRegular',
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
   }
 
   Future<void> addDailyBudget(BuildContext context) async {
@@ -155,12 +163,13 @@ class _enterBudgetState extends State<enterBudget> {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height /10,
+                      height: MediaQuery.of(context).size.height / 10,
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontFamily: 'thaRegular'),
-                      decoration: InputDecoration(
+                      style: const TextStyle(
+                          fontSize: 18, fontFamily: 'thaRegular'),
+                      decoration: const InputDecoration(
                         hintText: 'Day number',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -169,8 +178,7 @@ class _enterBudgetState extends State<enterBudget> {
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide: BorderSide(
                               color: Colors.grey,
-                            )
-                        ),
+                            )),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
@@ -204,16 +212,16 @@ class _enterBudgetState extends State<enterBudget> {
                         });
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontFamily: 'thaRegular',
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Amount',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -222,8 +230,7 @@ class _enterBudgetState extends State<enterBudget> {
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide: BorderSide(
                               color: Colors.grey,
-                            )
-                        ),
+                            )),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide: BorderSide(
@@ -258,7 +265,7 @@ class _enterBudgetState extends State<enterBudget> {
                       },
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height /15,
+                      height: MediaQuery.of(context).size.height / 15,
                     )
                   ],
                 ),
@@ -282,7 +289,7 @@ class _enterBudgetState extends State<enterBudget> {
                         _dailyExpensesList,
                         usersGroup);
                   },
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'Submit',
                     ),
