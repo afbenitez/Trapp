@@ -5,6 +5,7 @@ import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/home/neu_home.dart';
+import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
 class Wrapper extends StatelessWidget {
@@ -48,6 +49,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
     NHome(),
     LoadingTrips(),
     Budget(),
+    AllItems(),
     Settings(),
     //  Items() por ejemplo
   ];
@@ -78,6 +80,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
           BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on),
             label: 'Budget',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.playlist_add_check_sharp),
+            label: 'Items',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
