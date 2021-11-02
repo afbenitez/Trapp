@@ -121,7 +121,6 @@ class _LoadingTripsState extends State<LoadingTrips> {
   void dispose() {
     UserService us = UserService(uid: '');
     us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch-start)/1000);
-    // print(DateTime.now().millisecondsSinceEpoch-start);
     super.dispose();
   }
 
