@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 import 'package:trapp_flutter/screens/budget/heading.dart';
@@ -25,7 +28,7 @@ class Budget extends StatelessWidget {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Heading(),
+                  const Heading(),
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 35,
                   ),
@@ -61,6 +64,8 @@ class _EnterBudgetState extends State<EnterBudget> {
   var phone = '';
   var birthday = '';
   var gender = '';
+
+  var format = NumberFormat("#,###,###.#","en_ES");
 
   @override
   void initState() {
@@ -117,11 +122,11 @@ class _EnterBudgetState extends State<EnterBudget> {
                       progressColor: const Color(0xff00AFB9),
                       backgroundColor: Colors.transparent,
                       lineHeight: 10,
-                      percent: _dailyExpensesList[index]['amount'] / 20000,
+                      percent: _dailyExpensesList[index]['amount'] / 2300000,
                       animation: true,
                       animationDuration: 500,
                       leading: Text(
-                        '${_dailyExpensesList[index]['dayNumber']}',
+                        'day ${_dailyExpensesList[index]['dayNumber']}',
                         // ',',
                         style: const TextStyle(
                           fontFamily: 'thaRegular',
@@ -130,7 +135,7 @@ class _EnterBudgetState extends State<EnterBudget> {
                         ),
                       ),
                       trailing: Text(
-                        '${_dailyExpensesList[index]['amount']}',
+                        '${format.format(_dailyExpensesList[index]['amount'])}',
                         style: const TextStyle(
                           fontFamily: 'thaRegular',
                           fontSize: 15,
@@ -257,7 +262,7 @@ class _EnterBudgetState extends State<EnterBudget> {
                         ),
                       ),
                       validator: (val) =>
-                          val!.isEmpty ? 'Enter the amount)' : null,
+                          val!.isEmpty ? 'Enter the amount' : null,
                       onChanged: (val) {
                         setState(() {
                           _amount = int.parse(val);
@@ -276,18 +281,17 @@ class _EnterBudgetState extends State<EnterBudget> {
                     DailyExpenses dailyExpenses = DailyExpenses(
                         amount: _amount, day: _dayNumber, plansId: plansId);
                     if (_formKey.currentState!.validate()) {
-                      Navigator.of(context).pop();
+                      _dailyExpensesList.add(dailyExpenses.toJson());
+                      UserService(uid: userId).updateUserData(
+                          firstName,
+                          lastName,
+                          phone,
+                          birthday,
+                          email,
+                          gender,
+                          _dailyExpensesList,
+                          usersGroup);
                     }
-                    _dailyExpensesList.add(dailyExpenses.toJson());
-                    UserService(uid: userId).updateUserData(
-                        firstName,
-                        lastName,
-                        phone,
-                        birthday,
-                        email,
-                        gender,
-                        _dailyExpensesList,
-                        usersGroup);
                   },
                   child: const Center(
                     child: Text(

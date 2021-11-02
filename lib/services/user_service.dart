@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 class UserService {
 
@@ -31,10 +32,12 @@ class UserService {
     });
   }
 
-  getUser()async{
-    List data = [];
-    var documentSnapshot = await users.doc(uid).get();
-    return data;
+  Future updateGroups(String uid, int numberMembers, int totalBudget) async{
+    CollectionReference groups = FirebaseFirestore.instance.collection('userGroup');
+    return await groups.doc(uid).set({
+      'numberMembers': numberMembers,
+      'totalBudget': totalBudget
+    });
   }
 
 }
