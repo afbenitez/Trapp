@@ -33,42 +33,74 @@ class ItemsList extends StatefulWidget {
   _ItemsListState createState() => _ItemsListState();
 }
 
+bool state(){
+  Random ran = new Random();
+  return ran.nextBool();
+}
+
 class _ItemsListState extends State<ItemsList> {
   @override
   Widget build(BuildContext context) {
     final items = Provider.of<List<Item>>(context);
-    bool isSwitched = false;
+    bool isSwitched = true;
 
-    bool state(){
-      Random ran = new Random();
-      return ran.nextBool();
-    }
     return ListView.builder(
       itemCount: items.length,
-      itemBuilder: (context, index) {
-        return Card(
-          margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-          color: const Color(0xff00AFB9),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: const Color(0xffEEEEEE),
-              backgroundImage: AssetImage("assets/logo.png"),
-              radius: 25.0,
+      itemBuilder: (context, index){
+
+        if(index <= 10){
+          return Card(
+            margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+            color: const Color(0xff00AFB9),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: const Color(0xffEEEEEE),
+                backgroundImage: AssetImage("assets/logo.png"),
+                radius: 23.0,
+              ),
+              title: Text(items[index].name),
+              trailing: new Switch(
+                value: true,
+                activeColor: Colors.yellow,
+                activeTrackColor: Colors.yellowAccent,
+                onChanged: (value){
+                  setState(() {
+                    isSwitched = value;
+                  });
+                },
+              ),
             ),
-            title: Text(items[index].name),
-            trailing: new Switch(
-              value: state(),
-              activeColor: Colors.yellow,
-              activeTrackColor: Colors.yellowAccent,
-              onChanged: (value){
-                setState(() {
-                  isSwitched = value;
-                });
-              },
+          );
+        }
+        else {
+          return Card(
+            margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+            color: const Color(0xff00AFB9),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: const Color(0xffEEEEEE),
+                backgroundImage: AssetImage("assets/logo.png"),
+                radius: 23.0,
+              ),
+              title: Text(items[index].name),
+              trailing: new Switch(
+                value: false,
+                activeColor: Colors.yellow,
+                activeTrackColor: Colors.yellowAccent,
+                onChanged: (value){
+                  setState(() {
+                    isSwitched = value;
+                  });
+                },
+              ),
             ),
-          ),
-        );
+          );
+        }
+
       },
     );
+
   }
 }
+
+
