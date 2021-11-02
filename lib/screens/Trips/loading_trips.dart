@@ -34,17 +34,31 @@ class _LoadingTripsState extends State<LoadingTrips> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            elevation: 20,
-            title: const Text("What's your budget"),
-            content: TextField(
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  valueText = value;
-                });
-              },
-              controller: _textFieldController,
-              decoration: const InputDecoration(hintText: "New Budget"),
+            contentPadding: const EdgeInsets.all(25),
+            actionsPadding: const EdgeInsets.all(10),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            elevation: 10,
+            title: const Center( child: Text("What's your budget") ),
+            content: Neumorphic(
+              style: NeumorphicStyle(
+                depth: -8,
+                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        valueText = value;
+                      });
+                    },
+                    controller: _textFieldController,
+                    decoration: const InputDecoration(hintText: "New Budget"),
+                ),
+              ),
             ),
             actions: <Widget>[
               FlatButton(
@@ -126,192 +140,136 @@ class _LoadingTripsState extends State<LoadingTrips> {
         ? const CircularProgressIndicator(
             strokeWidth: 5.0,
           )
-        : Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/imgHome.jpeg"),
-                fit: BoxFit.cover,
+        : SingleChildScrollView(
+          child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/imgHome.jpeg"),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            padding: const EdgeInsets.fromLTRB(25, 35, 25, 0),
-            // color: NeumorphicTheme.baseColor(context),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const <Widget>[
-                      Text('Plan your trip'),
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/logoTrapp.png'),
-                        backgroundColor: Colors.transparent,
-                        radius: 20,
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: Neumorphic(
-                          style: NeumorphicStyle(
-                              depth: -8,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(20))),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                                // border: OutlineInputBorder(),
-                                // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                icon: Padding(
-                                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                    child: Icon(Icons.explore)),
-                                hintText: 'Search'),
+              padding: const EdgeInsets.fromLTRB(25, 35, 25, 0),
+              // color: NeumorphicTheme.baseColor(context),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const <Widget>[
+                        Text('Plan your trip'),
+                        CircleAvatar(
+                          backgroundImage: AssetImage('assets/logoTrapp.png'),
+                          backgroundColor: Colors.transparent,
+                          radius: 20,
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Neumorphic(
+                            style: NeumorphicStyle(
+                                depth: -8,
+                                boxShape: NeumorphicBoxShape.roundRect(
+                                    BorderRadius.circular(20))),
+                            child: const TextField(
+                              decoration: InputDecoration(
+                                  // border: OutlineInputBorder(),
+                                  // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                  icon: Padding(
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                      child: Icon(Icons.explore)),
+                                  hintText: 'Search'),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      IconButton(
-                          onPressed: () {
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                budget -= 1;
+                              });
+                            },
+                            icon: const Icon(Icons.filter_alt_outlined)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(" \u00240"),
+                        Expanded(
+                            child: Slider(
+                          onChanged: (double value) {
                             setState(() {
-                              budget -= 1;
+                              budget = value;
                             });
                           },
-                          icon: const Icon(Icons.filter_alt_outlined)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(" \u00240"),
-                      Expanded(
-                          child: Slider(
-                        onChanged: (double value) {
-                          setState(() {
-                            budget = value;
-                          });
+                          divisions: 5,
+                          max: 10000000,
+                          min: 0,
+                          value: budget,
+                        )),
+                        Text('\u0024${(budget / 1000).floor()}k'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              _displayTextInputDialog(context);
+                            },
+                            icon: const Icon(Icons.edit)),
+                      ],
+                    ),
+                    const Divider(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      height: 200,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: trips.length,
+                        itemBuilder: (context, index) {
+                          return TripCard(trip: trips[index]);
                         },
-                        divisions: 5,
-                        max: 10000000,
-                        min: 0,
-                        value: budget,
-                      )),
-                      Text('\u0024${(budget / 1000).floor()}k'),
-                      const SizedBox(
-                        width: 10,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            width: 15,
+                          );
+                        },
                       ),
-                      IconButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            setState(() {
-                              budget += 1;
-                            });
-                          },
-                          icon: const Icon(Icons.edit)),
-                      ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => SizedBox(
-                                height: 150,
-                                width: 150,
-                                child: AlertDialog(
-                                  contentPadding: EdgeInsets.zero,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                  ),
-                                  title: const Text('Set your new budget'),
-                                  content: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Neumorphic(
-                                        style: NeumorphicStyle(
-                                          depth: -8,
-                                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 50),
-                                          child: TextField(
-
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        child: Neumorphic(
-                                          style: NeumorphicStyle(
-                                            boxShape: NeumorphicBoxShape.roundRect(
-                                                const BorderRadius.only(
-                                                bottomLeft: Radius.circular(15),
-                                                bottomRight: Radius.circular(15)
-                                            ))
-                                          ),
-                                          child: const Text(
-                                            "Rate Product",
-                                            style: TextStyle(color: Colors.white),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text('Dialog')),
-                    ],
-                  ),
-                  const Divider(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: trips.length,
-                      itemBuilder: (context, index) {
-                        return TripCard(trip: trips[index]);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(
-                          width: 15,
-                        );
-                      },
                     ),
-                  ),
-                  const Divider(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: closePlaces.length,
-                      itemBuilder: (context, index) {
-                        return PlaceCard(place: closePlaces[index]);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(
-                          width: 15,
-                        );
-                      },
+                    const Divider(
+                      height: 15,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ]),
-          );
+                    SizedBox(
+                      height: 200,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: closePlaces.length,
+                        itemBuilder: (context, index) {
+                          return PlaceCard(place: closePlaces[index]);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            width: 15,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ]),
+            ),
+        );
   }
 }
 
