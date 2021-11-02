@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
 import 'package:trapp_flutter/services/auth.dart';
 import 'package:trapp_flutter/services/trips_service.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class LoadingTrips extends StatefulWidget {
   const LoadingTrips({Key? key}) : super(key: key);
@@ -14,19 +16,21 @@ class LoadingTrips extends StatefulWidget {
 }
 
 class _LoadingTripsState extends State<LoadingTrips> {
-  final AuthService _auth = AuthService();
+
+  late int start;
 
   List<Place> places = [];
   List<Place> closePlaces = [];
 
   List<Trip> trips = [];
-  // List<Place> affordablePlaces = [];
+  List<Trip> affordableActivities = [];
 
-  double budget = 0.0;
+  double budget = 20000000.0;
   double latitude = 0.0;
   double longitude = 0.0;
   late String codeDialog;
   late String valueText;
+  String keyWordFilter = '';
 
   final TextEditingController _textFieldController = TextEditingController();
   Future<void> _displayTextInputDialog(BuildContext context) async {
@@ -40,23 +44,24 @@ class _LoadingTripsState extends State<LoadingTrips> {
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             elevation: 10,
-            title: const Center( child: Text("What's your budget") ),
+            title: const Center(child: Text("What's your budget")),
             content: Neumorphic(
               style: NeumorphicStyle(
                 depth: -8,
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() {
-                        valueText = value;
-                      });
-                    },
-                    controller: _textFieldController,
-                    decoration: const InputDecoration(hintText: "New Budget"),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() {
+                      valueText = value;
+                    });
+                  },
+                  controller: _textFieldController,
+                  decoration: const InputDecoration(hintText: "New Budget"),
                 ),
               ),
             ),
@@ -113,7 +118,18 @@ class _LoadingTripsState extends State<LoadingTrips> {
   }
 
   @override
+  void dispose() {
+    UserService us = UserService(uid: '');
+    us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch-start)/1000);
+    // print(DateTime.now().millisecondsSinceEpoch-start);
+    super.dispose();
+  }
+
+  @override
   void initState() {
+    setState(() {
+      start = DateTime.now().millisecondsSinceEpoch;
+    });
     super.initState();
     setLocation();
     TripsService().getPlacesList().then((ps) {
@@ -132,33 +148,45 @@ class _LoadingTripsState extends State<LoadingTrips> {
   Widget build(BuildContext context) {
     setState(() {
       closePlaces =
-          places.where((p) => p.distance(latitude, longitude) < 20).toList();
+          places.where((p) => p.distance(latitude, longitude) < 20 && p.name.contains(keyWordFilter)).toList();
+      affordableActivities =
+          trips.where((t) =>
+          t.price <= budget
+              // && t.name.contains(keyWordFilter)
+                ).toList();
       // affordablePlaces = places.where((p) => p < 4).toList();
     });
+
+    final Size size = MediaQuery.of(context).size;
 
     return places.isEmpty
         ? const CircularProgressIndicator(
             strokeWidth: 5.0,
           )
         : SingleChildScrollView(
-          child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/imgHome.jpeg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              padding: const EdgeInsets.fromLTRB(25, 35, 25, 0),
+            // physics: const BouncingScrollPhysics(),
+            child: Container(
+              width: size.width,
+              height: size.height,
+              color: const Color(0xFFC7E7E9),
+
+              padding: const EdgeInsets.fromLTRB(20, 45, 20, 0),
               // color: NeumorphicTheme.baseColor(context),
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   // crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const <Widget>[
-                        Text('Plan your trip'),
+                        Text(
+                          'Plan your trip',
+                          style: TextStyle(
+                            fontFamily: 'thaBold',
+                            fontSize: 35,
+                          ),
+                        ),
                         CircleAvatar(
                           backgroundImage: AssetImage('assets/logoTrapp.png'),
                           backgroundColor: Colors.transparent,
@@ -175,8 +203,13 @@ class _LoadingTripsState extends State<LoadingTrips> {
                                 depth: -8,
                                 boxShape: NeumorphicBoxShape.roundRect(
                                     BorderRadius.circular(20))),
-                            child: const TextField(
-                              decoration: InputDecoration(
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  keyWordFilter = value;
+                                });
+                              },
+                              decoration: const InputDecoration(
                                   // border: OutlineInputBorder(),
                                   // contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                   icon: Padding(
@@ -192,7 +225,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
                         IconButton(
                             onPressed: () {
                               setState(() {
-                                budget -= 1;
+                                 budget = 20000000;
                               });
                             },
                             icon: const Icon(Icons.filter_alt_outlined)),
@@ -210,7 +243,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
                             });
                           },
                           divisions: 5,
-                          max: 10000000,
+                          max: 100000000,
                           min: 0,
                           value: budget,
                         )),
@@ -226,21 +259,26 @@ class _LoadingTripsState extends State<LoadingTrips> {
                             icon: const Icon(Icons.edit)),
                       ],
                     ),
+                    const Text(
+                      'For your budget',
+                      style: TextStyle(
+                        fontFamily: 'thaBold',
+                        fontSize: 25,
+                      ),
+                    ),
                     const Divider(
                       height: 15,
                     ),
                     SizedBox(
-                      height: 200,
-                      child: ListView.separated(
+                      height: 225,
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: trips.length,
+                        itemCount: affordableActivities.length,
                         itemBuilder: (context, index) {
-                          return TripCard(trip: trips[index]);
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            width: 15,
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TripCard(trip: affordableActivities[index]),
                           );
                         },
                       ),
@@ -248,18 +286,26 @@ class _LoadingTripsState extends State<LoadingTrips> {
                     const Divider(
                       height: 15,
                     ),
+                    const Text(
+                      'Places near to you',
+                      style: TextStyle(
+                        fontFamily: 'thaBold',
+                        fontSize: 25,
+                      ),
+                    ),
+                    const Divider(
+                      height: 15,
+                    ),
                     SizedBox(
-                      height: 200,
-                      child: ListView.separated(
+                      height: 225,
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
                         itemCount: closePlaces.length,
                         itemBuilder: (context, index) {
-                          return PlaceCard(place: closePlaces[index]);
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            width: 15,
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PlaceCard(place: closePlaces[index]),
                           );
                         },
                       ),
@@ -269,7 +315,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
                     )
                   ]),
             ),
-        );
+          );
   }
 }
 
@@ -311,7 +357,20 @@ class PlaceCard extends StatelessWidget {
                       height: 100,
                     ),
                   ),
-                  Text(place.name),
+                  const Divider(
+                    height: 35,
+                  ),
+                  Neumorphic(
+                    style: const NeumorphicStyle(
+                        depth: -5
+                    ),
+                    child: SizedBox(
+                      width: 115,
+                      height: 35,
+                      // child: Center(child: Text(trip.price.toString())),
+                      child: Center(child: Text(place.name)),
+                    ),
+                  ),
                 ],
               )),
         ),
@@ -334,7 +393,7 @@ class TripCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("You have pressed ${trip.img}")),
+            SnackBar(content: Text("You have pressed ${trip.price}")),
           );
         },
         child: SizedBox(
@@ -358,7 +417,21 @@ class TripCard extends StatelessWidget {
                       height: 100,
                     ),
                   ),
-                  Text(trip.name),
+                  const Divider(
+                    height: 35,
+                  ),
+                  Neumorphic(
+                    style: const NeumorphicStyle(
+                      depth: -5
+                    ),
+                    child: SizedBox(
+                      width: 115,
+                      height: 35,
+                      // child: Center(child: Text(trip.price.toString())),
+                      child: Center(child: Text(' \u0024${NumberFormat("#,##0.00", "en_US").format(trip.price)}')),
+                    ),
+                    ),
+
                 ],
               )),
         ),

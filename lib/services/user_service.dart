@@ -40,4 +40,12 @@ class UserService {
     });
   }
 
+  Future setTime(String screen, double seconds) async {
+    return FirebaseFirestore.instance.collection('userTime')
+      ..doc().set({
+        'activity': screen,
+        'time': seconds
+      });
+  }
+
 }
