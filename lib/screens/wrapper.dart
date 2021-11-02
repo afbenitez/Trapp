@@ -67,6 +67,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
