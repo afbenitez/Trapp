@@ -7,6 +7,7 @@ import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/home/neu_home.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -28,19 +29,26 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerProviderStateMixin{
-
+  late int time;
   late TabController _tabController;
 
   @override
   void initState(){
+    setState((){
+      time = DateTime.now().millisecondsSinceEpoch;
+    });
+
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+
   }
 
   @override
   void dispose(){
     super.dispose();
     _tabController.dispose();
+    UserService us = UserService(uid: '');
+    us.setTime('App', (DateTime.now().millisecondsSinceEpoch-time)/1000);
   }
 
   int _selectedIndex = 0;

@@ -10,12 +10,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:trapp_flutter/services/auth.dart';
 
 void main() async {
-  final timer = TimeUsage();
-  timer.start();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
-  timer.stop();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -37,31 +36,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TimeUsage{
-  late DateTime startDateTime;
-  final mainStreamController = StreamController<String>();
-  final stateStreamController = StreamController<bool>();
-  bool running = false;
-
-  void start(){
-    startDateTime = DateTime.now();
-    running = true;
-    stateStreamController.sink.add(true);
-
-    Timer.periodic(Duration(milliseconds: 1), (timer) {
-      if(!running){
-        timer.cancel();
-        return;
-      }
-      final time = DateTime.now();
-
-    });
-  }
-
-  void stop(){
-    running = false;
-    stateStreamController.sink.add(false);
-  }
 
 
-}
+
