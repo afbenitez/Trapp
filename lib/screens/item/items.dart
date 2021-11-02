@@ -33,16 +33,13 @@ class ItemsList extends StatefulWidget {
   _ItemsListState createState() => _ItemsListState();
 }
 
-bool state(){
-  Random ran = new Random();
-  return ran.nextBool();
-}
 
 class _ItemsListState extends State<ItemsList> {
   @override
   Widget build(BuildContext context) {
     final items = Provider.of<List<Item>>(context);
     bool isSwitched = true;
+
 
     return ListView.builder(
       itemCount: items.length,
@@ -51,7 +48,7 @@ class _ItemsListState extends State<ItemsList> {
         if(index <= 10){
           return Card(
             margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-            color: const Color(0xff00AFB9),
+            color: const Color(0xffEDD83D),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: const Color(0xffEEEEEE),
@@ -62,7 +59,7 @@ class _ItemsListState extends State<ItemsList> {
               trailing: new Switch(
                 value: true,
                 activeColor: Colors.yellow,
-                activeTrackColor: Colors.yellowAccent,
+                activeTrackColor: Colors.yellow,
                 onChanged: (value){
                   setState(() {
                     isSwitched = value;
