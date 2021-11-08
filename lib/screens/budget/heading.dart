@@ -32,8 +32,8 @@ class _HeadingState extends State<Heading> {
         _dailyExpenses.forEach((element) {
           amount = element['amount'];
           total += amount;
-          debugPrint('$amount');
-          debugPrint('${format.format(total)}');
+          // debugPrint('$amount');
+          // debugPrint('${format.format(total)}');
         });
       });
     });

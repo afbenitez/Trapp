@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text(
-                                'Welcome',
+                                'Welcome!',
                               style: TextStyle(
                                 fontFamily: 'thaBold',
                                 fontSize: MediaQuery.of(context).size.width / 7,

@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:trapp_flutter/screens/authentication/sign_in.dart';
+// import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/authentication/sign_up_page.dart';
 
 class Home extends StatelessWidget {

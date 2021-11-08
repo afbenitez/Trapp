@@ -147,7 +147,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
   Widget build(BuildContext context) {
     setState(() {
       closePlaces =
-          places.where((p) => p.distance(latitude, longitude) < 20 && p.name.contains(keyWordFilter)).toList();
+          places.where((p) => p.distance(latitude, longitude) < 9 && p.name.contains(keyWordFilter)).toList();
       affordableActivities =
           trips.where((t) =>
           t.price <= budget
@@ -166,10 +166,10 @@ class _LoadingTripsState extends State<LoadingTrips> {
             // physics: const BouncingScrollPhysics(),
             child: Container(
               width: size.width,
-              height: size.height,
+              // height: size.height,
               color: const Color(0xFFC7E7E9),
 
-              padding: const EdgeInsets.fromLTRB(20, 45, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 45),
               // color: NeumorphicTheme.baseColor(context),
               child: Column(
                   mainAxisSize: MainAxisSize.max,
