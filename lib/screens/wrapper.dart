@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
+import 'package:trapp_flutter/screens/activity/addActivity.dart';
 // import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
@@ -49,7 +50,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   static const List<Widget> _widgetOptions = <Widget>[
     LoadingTrips(),
-    NoInternet(),
+    ActivitySelect(),
     Budget(),
     NoInternet(),
     AllItems(),
@@ -133,14 +134,14 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Neumorphic(
           style: NeumorphicStyle(
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
             color: const Color(0xFF00AFB9),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
