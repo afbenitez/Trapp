@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/Widget/circle.dart';
 import 'package:trapp_flutter/screens/authentication/sign_in.dart';
@@ -5,6 +7,10 @@ import 'package:trapp_flutter/screens/authentication/sign_up_page.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +72,17 @@ class Home extends StatelessWidget {
                             height: 25,
                           ),
                           RaisedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
+
                                       builder: (context) =>
                                       // const Text("Test"),
-                                          const SignIn()
+                                        SignIn(analytics: analytics, observer: observer,)
                                   ),
                                 );
+                                await analytics.setCurrentScreen(screenName: 'SignIn');
                               },
                               color: const Color(0xff00AFB9),
                               shape: const RoundedRectangleBorder(

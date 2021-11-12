@@ -1,9 +1,15 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/services/auth.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key, required this.analytics,
+    required this.observer,}) : super(key: key);
+
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
   @override
   _SignInState createState() => _SignInState();
@@ -205,6 +211,9 @@ class _SignInState extends State<SignIn> {
                             });
                           } else {
                             Navigator.pop(context);
+                            await widget.analytics.logEvent(name: 'inicioSesion', parameters: <String, dynamic>{
+                              'email': email
+                            });
                           }
                         }
                       },
