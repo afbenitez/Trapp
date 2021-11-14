@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +9,10 @@ import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
 import 'package:trapp_flutter/screens/activity/addActivity.dart';
 // import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
+import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
+import 'package:trapp_flutter/screens/internetConnection.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
@@ -33,6 +38,8 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  OverlayEntry? entry;
+  late StreamSubscription subscription;
 
   @override
   void initState() {
@@ -46,11 +53,38 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
     _tabController.dispose();
   }
 
+  void connectionState(){
+    var connection = Connectivity().checkConnectivity();
+    if(connection == ConnectivityResult.none){
+      showOverlay();
+    }
+  }
+
+  showOverlay() async {
+    final overlay = Overlay.of(context)!;
+    final renderbox = context.findRenderObject() as RenderBox;
+    final size = renderbox.size;
+
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+        width: size.width,
+        child: InternetMessage(),
+      ),
+    );
+    overlay.insert(entry!);
+
+    await Future.delayed(Duration(seconds: 3));
+
+    entry!.remove();
+
+  }
+
   int _selectedIndex = 3;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _widgetOptions =
+  <Widget>[
     LoadingTrips(),
-    ActivitySelect(),
+    MainPage(title: 'titulo'),
     Budget(),
     NoInternet(),
     AllItems(),

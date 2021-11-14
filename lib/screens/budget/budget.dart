@@ -1,14 +1,21 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 import 'package:trapp_flutter/screens/budget/heading.dart';
+import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/services/user_service.dart';
 
 class Budget extends StatelessWidget {
@@ -21,23 +28,23 @@ class Budget extends StatelessWidget {
 
   Widget circularBar(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xffEEEEEE),
-        body: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  const Heading(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 35,
+          child: Scaffold(
+            backgroundColor: const Color(0xffEEEEEE),
+            body: SingleChildScrollView(
+                padding: const EdgeInsets.all(10),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      const Heading(),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 35,
+                      ),
+                      const EnterBudget(),
+                    ],
                   ),
-                  const EnterBudget(),
-                ],
-              ),
-            )),
-      ),
-    );
+                )),
+          ),
+        );
   }
 }
 
@@ -49,6 +56,7 @@ class EnterBudget extends StatefulWidget {
 }
 
 class _EnterBudgetState extends State<EnterBudget> {
+
   int counter = 0;
   String userId = '';
   int _dayNumber = 0;
@@ -67,11 +75,30 @@ class _EnterBudgetState extends State<EnterBudget> {
 
   var format = NumberFormat("#,###,###.#","en_ES");
 
+  var connection = false;
+  OverlayEntry? entry;
+  late StreamSubscription subscription;
+
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
+
+    if(!connection) {
+      ConnectivityStatus(entry: entry, context: context).checkConnectionStatus();
+      connection = true;
+    };
+
+    subscription =
+        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context).showConnectivitySnackBar);
   }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
 
   fetchUserInfo() {
     User? getUser = FirebaseAuth.instance.currentUser;
@@ -93,9 +120,7 @@ class _EnterBudgetState extends State<EnterBudget> {
 
   @override
   Widget build(BuildContext context) {
-    return (_dailyExpensesList.isEmpty)
-        ? const CircularProgressIndicator()
-        : Column(
+    return Column(
             children: [
               Neumorphic(
                 child: RaisedButton(
