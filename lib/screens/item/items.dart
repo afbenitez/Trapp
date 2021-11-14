@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
@@ -46,6 +47,8 @@ class _ItemsListState extends State<ItemsList> {
 
   late int start;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -64,8 +67,6 @@ class _ItemsListState extends State<ItemsList> {
   @override
   void dispose() {
     subscription.cancel();
-    UserService us = UserService(uid: '');
-    us.setTime('Item', (DateTime.now().millisecondsSinceEpoch-start)/1000);
     super.dispose();
   }
 
