@@ -28,7 +28,8 @@ class DatabaseService {
           img: d.get('img') ?? 'https://picsum.photos/300/200',
           reviews: d.get('reviews')!.length ?? 0,
           rating: d.get('reviews')[0]['califiction'] ?? 5,
-          price: 0,);
+          price: 0,
+      );
     }).toList();
   }
 

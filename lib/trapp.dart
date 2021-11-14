@@ -1,5 +1,10 @@
+<<<<<<< HEAD:lib/main2.dart
 import 'dart:async';
 
+=======
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+>>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e:lib/trapp.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
@@ -20,12 +25,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User_fb?>.value(
       initialData: null,
       value: AuthService().user,
       child: MaterialApp(
+        navigatorObservers: <NavigatorObserver>[observer],
         debugShowCheckedModeBanner: false,
         home: const Wrapper(),
         routes: {

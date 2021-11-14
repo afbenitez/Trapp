@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
+import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/services/auth.dart';
 import 'package:trapp_flutter/services/trips_service.dart';
 import 'package:trapp_flutter/services/user_service.dart';
@@ -121,7 +124,6 @@ class _LoadingTripsState extends State<LoadingTrips> {
   void dispose() {
     UserService us = UserService(uid: '');
     us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch-start)/1000);
-    // print(DateTime.now().millisecondsSinceEpoch-start);
     super.dispose();
   }
 
@@ -148,7 +150,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
   Widget build(BuildContext context) {
     setState(() {
       closePlaces =
-          places.where((p) => p.distance(latitude, longitude) < 20 && p.name.contains(keyWordFilter)).toList();
+          places.where((p) => p.distance(latitude, longitude) < 9 && p.name.contains(keyWordFilter)).toList();
       affordableActivities =
           trips.where((t) =>
           t.price <= budget
@@ -164,158 +166,158 @@ class _LoadingTripsState extends State<LoadingTrips> {
             strokeWidth: 5.0,
           )
         : SingleChildScrollView(
-            // physics: const BouncingScrollPhysics(),
-            child: Container(
-              width: size.width,
-              height: size.height,
-              color: const Color(0xFFC7E7E9),
+              // physics: const BouncingScrollPhysics(),
+              child: Container(
+                width: size.width,
+                // height: size.height,
+                color: const Color(0xFFC7E7E9),
 
-              padding: const EdgeInsets.fromLTRB(20, 45, 20, 0),
-              // color: NeumorphicTheme.baseColor(context),
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const <Widget>[
-                        Text(
-                          'Plan your trip',
-                          style: TextStyle(
-                            fontFamily: 'thaBold',
-                            fontSize: 35,
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundImage: AssetImage('assets/logoTrapp.png'),
-                          backgroundColor: Colors.transparent,
-                          radius: 20,
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Neumorphic(
-                            style: NeumorphicStyle(
-                                depth: -8,
-                                boxShape: NeumorphicBoxShape.roundRect(
-                                    BorderRadius.circular(20))),
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  keyWordFilter = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  // border: OutlineInputBorder(),
-                                  // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                  icon: Padding(
-                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                      child: Icon(Icons.explore)),
-                                  hintText: 'Search'),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 45),
+                // color: NeumorphicTheme.baseColor(context),
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const <Widget>[
+                          Text(
+                            'Plan your trip',
+                            style: TextStyle(
+                              fontFamily: 'thaBold',
+                              fontSize: 35,
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        IconButton(
-                            onPressed: () {
+                          CircleAvatar(
+                            backgroundImage: AssetImage('assets/logoTrapp.png'),
+                            backgroundColor: Colors.transparent,
+                            radius: 20,
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Neumorphic(
+                              style: NeumorphicStyle(
+                                  depth: -8,
+                                  boxShape: NeumorphicBoxShape.roundRect(
+                                      BorderRadius.circular(20))),
+                              child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    keyWordFilter = value;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                    // border: OutlineInputBorder(),
+                                    // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                    icon: Padding(
+                                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                        child: Icon(Icons.explore)),
+                                    hintText: 'Search'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                   budget = 20000000;
+                                });
+                              },
+                              icon: const Icon(Icons.filter_alt_outlined)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(" \u00240"),
+                          Expanded(
+                              child: Slider(
+                            onChanged: (double value) {
                               setState(() {
-                                 budget = 20000000;
+                                budget = value;
                               });
                             },
-                            icon: const Icon(Icons.filter_alt_outlined)),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(" \u00240"),
-                        Expanded(
-                            child: Slider(
-                          onChanged: (double value) {
-                            setState(() {
-                              budget = value;
-                            });
-                          },
-                          divisions: 5,
-                          max: 100000000,
-                          min: 0,
-                          value: budget,
-                        )),
-                        Text('\u0024${(budget / 1000).floor()}k'),
-                        const SizedBox(
-                          width: 10,
+                            divisions: 5,
+                            max: 100000000,
+                            min: 0,
+                            value: budget,
+                          )),
+                          Text('\u0024${(budget / 1000).floor()}k'),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                              color: Colors.blue,
+                              onPressed: () {
+                                _displayTextInputDialog(context);
+                              },
+                              icon: const Icon(Icons.edit)),
+                        ],
+                      ),
+                      const Text(
+                        'For your budget',
+                        style: TextStyle(
+                          fontFamily: 'thaBold',
+                          fontSize: 25,
                         ),
-                        IconButton(
-                            color: Colors.blue,
-                            onPressed: () {
-                              _displayTextInputDialog(context);
-                            },
-                            icon: const Icon(Icons.edit)),
-                      ],
-                    ),
-                    const Text(
-                      'For your budget',
-                      style: TextStyle(
-                        fontFamily: 'thaBold',
-                        fontSize: 25,
                       ),
-                    ),
-                    const Divider(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      height: 225,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: affordableActivities.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TripCard(trip: affordableActivities[index]),
-                          );
-                        },
+                      const Divider(
+                        height: 15,
                       ),
-                    ),
-                    const Divider(
-                      height: 15,
-                    ),
-                    const Text(
-                      'Places near to you',
-                      style: TextStyle(
-                        fontFamily: 'thaBold',
-                        fontSize: 25,
+                      SizedBox(
+                        height: 225,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: affordableActivities.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TripCard(trip: affordableActivities[index]),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    const Divider(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      height: 225,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: closePlaces.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: PlaceCard(place: closePlaces[index]),
-                          );
-                        },
+                      const Divider(
+                        height: 15,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ]),
-            ),
-          );
+                      const Text(
+                        'Places near to you',
+                        style: TextStyle(
+                          fontFamily: 'thaBold',
+                          fontSize: 25,
+                        ),
+                      ),
+                      const Divider(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 225,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: closePlaces.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: PlaceCard(place: closePlaces[index]),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      )
+                    ]),
+              ),
+            );
   }
 }
 

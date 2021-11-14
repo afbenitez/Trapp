@@ -32,8 +32,8 @@ class _HeadingState extends State<Heading> {
         _dailyExpenses.forEach((element) {
           amount = element['amount'];
           total += amount;
-          debugPrint('$amount');
-          debugPrint('${format.format(total)}');
+          // debugPrint('$amount');
+          // debugPrint('${format.format(total)}');
         });
       });
     });
@@ -44,21 +44,25 @@ class _HeadingState extends State<Heading> {
     final size = 130.0;
     return Container(
       child: Column(children: [
-        Container(
-          alignment: Alignment.topRight,
-          child: Image(
-            image: AssetImage('assets/logo.png'),
-            width: 60,
-            height: 60,
-          ),
-        ),
-        Text(
-          'How is my budget?',
-          style: TextStyle(
-            fontSize: 35,
-            fontFamily: 'thaBold',
-          ),
-          textAlign: TextAlign.center,
+        Row(
+          children: [
+            Text(
+              'How is my budget?',
+              style: TextStyle(
+                fontSize: 35,
+                fontFamily: 'thaBold',
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Image(
+                image: AssetImage('assets/logo.png'),
+                width: 45,
+                height: 45,
+              ),
+          ],
         ),
         SizedBox(
           height: MediaQuery.of(context).size.height / 30,

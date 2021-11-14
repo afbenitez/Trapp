@@ -1,10 +1,18 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
+import 'package:trapp_flutter/screens/activity/addActivity.dart';
+// import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
+import 'package:trapp_flutter/screens/connectivity/message.dart';
+import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
-import 'package:trapp_flutter/screens/home/neu_home.dart';
+import 'package:trapp_flutter/screens/internetConnection.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 import 'package:trapp_flutter/services/user_service.dart';
@@ -15,7 +23,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User_fb?>(context);
-    return (user == null)? const Home() : const MyStatefulWidget();
+    return (user == null) ? const Home() : const MyStatefulWidget();
   }
 }
 
@@ -28,38 +36,77 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
+<<<<<<< HEAD
 class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerProviderStateMixin{
   late int time;
+=======
+class _MyStatefulWidgetState extends State<MyStatefulWidget>
+    with SingleTickerProviderStateMixin {
+>>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e
   late TabController _tabController;
+  OverlayEntry? entry;
+  late StreamSubscription subscription;
 
   @override
+<<<<<<< HEAD
   void initState(){
     setState((){
       time = DateTime.now().millisecondsSinceEpoch;
     });
 
+=======
+  void initState() {
+>>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
 
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _tabController.dispose();
     UserService us = UserService(uid: '');
     us.setTime('App', (DateTime.now().millisecondsSinceEpoch-time)/1000);
   }
 
-  int _selectedIndex = 0;
+  void connectionState(){
+    var connection = Connectivity().checkConnectivity();
+    if(connection == ConnectivityResult.none){
+      showOverlay();
+    }
+  }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    NHome(),
+  showOverlay() async {
+    final overlay = Overlay.of(context)!;
+    final renderbox = context.findRenderObject() as RenderBox;
+    final size = renderbox.size;
+
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+        width: size.width,
+        child: InternetMessage(),
+      ),
+    );
+    overlay.insert(entry!);
+
+    await Future.delayed(Duration(seconds: 3));
+
+    entry!.remove();
+
+  }
+
+  int _selectedIndex = 3;
+
+  static const List<Widget> _widgetOptions =
+  <Widget>[
     LoadingTrips(),
+    MainPage(title: 'titulo'),
     Budget(),
+    NoInternet(),
     AllItems(),
     Settings(),
-    //  Items() por ejemplo
+    NoInternet(),
   ];
 
   void _onItemTapped(int index) {
@@ -71,39 +118,111 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+        extendBody: true,
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: NavBar(
+          index: _selectedIndex,
+          tap: _onItemTapped,
+        ));
+  }
+}
 
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+class NavItem extends StatelessWidget {
+  const NavItem(
+      {Key? key,
+      required this.index,
+      required this.icon,
+      required this.tap,
+      required this.current})
+      : super(key: key);
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.recommend),
-            label: 'Recommendations',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on),
-            label: 'Budget',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.playlist_add_check_sharp),
-            label: 'Items',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.grey[700],
-        selectedItemColor: Colors.blue[500],
-        onTap: _onItemTapped,
+  final int index;
+  final int current;
+  final IconData icon;
+  final Function tap;
+
+  @override
+  Widget build(BuildContext context) {
+    return (index == current)
+        ? Neumorphic(
+      style: NeumorphicStyle(
+        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
+        color: const Color(0xFF00AFB9)
       ),
+      child: IconButton(
+        onPressed: () {
+          tap(index);
+        },
+        icon: Icon(
+          icon,
+          size: 30,
+          color: Colors.white,
+        ),
+    ),
+    )
+        : IconButton(
+            onPressed: () {
+              tap(index);
+            },
+            icon: Icon(
+              icon,
+              size: 30,
+              color: Colors.white,
+            )
+    );
+  }
+}
+
+class NavBar extends StatelessWidget {
+  const NavBar({Key? key, required this.index, required this.tap})
+      : super(key: key);
+
+  final int index;
+  final Function tap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      child: Neumorphic(
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
+            color: const Color(0xFF00AFB9),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                NavItem(
+                    index: 0,
+                    icon: Icons.travel_explore,
+                    tap: tap,
+                    current: index),
+                NavItem(
+                    index: 1,
+                    icon: Icons.hiking_rounded,
+                    tap: tap,
+                    current: index),
+                NavItem(
+                    index: 2,
+                    icon: Icons.monetization_on_rounded,
+                    tap: tap,
+                    current: index),
+                NavItem(index: 3, icon: Icons.home, tap: tap, current: index),
+                NavItem(
+                    index: 4,
+                    icon: Icons.card_travel,
+                    tap: tap,
+                    current: index),
+                NavItem(
+                    index: 5, icon: Icons.settings, tap: tap, current: index),
+                NavItem(index: 6, icon: Icons.person, tap: tap, current: index),
+              ],
+            ),
+          )),
     );
   }
 }

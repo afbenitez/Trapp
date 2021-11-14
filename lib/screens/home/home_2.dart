@@ -1,10 +1,17 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:trapp_flutter/screens/authentication/sign_in.dart';
+// import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/authentication/sign_up_page.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +87,7 @@ class Home extends StatelessWidget {
                                   onPressed: (){
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute( builder: (context) => const SignIn() ),
+                                      MaterialPageRoute( builder: (context) => SignIn(observer: observer, analytics: analytics,) ),
                                     );
                                   },
                                   child: const Text("Login")
@@ -113,7 +120,8 @@ class Home extends StatelessWidget {
                   )
                 ),
               ],
-            )),
+            )
+        ),
       ),
     );
   }
