@@ -113,10 +113,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 class NavItem extends StatelessWidget {
   const NavItem(
       {Key? key,
-      required this.index,
-      required this.icon,
-      required this.tap,
-      required this.current})
+        required this.index,
+        required this.icon,
+        required this.tap,
+        required this.current})
       : super(key: key);
 
   final int index;
@@ -129,8 +129,8 @@ class NavItem extends StatelessWidget {
     return (index == current)
         ? Neumorphic(
       style: NeumorphicStyle(
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
-        color: const Color(0xFF00AFB9)
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
+          color: const Color(0xFF00AFB9)
       ),
       child: IconButton(
         onPressed: () {
@@ -141,17 +141,17 @@ class NavItem extends StatelessWidget {
           size: 30,
           color: Colors.white,
         ),
-    ),
+      ),
     )
         : IconButton(
-            onPressed: () {
-              tap(index);
-            },
-            icon: Icon(
-              icon,
-              size: 30,
-              color: Colors.white,
-            )
+        onPressed: () {
+          tap(index);
+        },
+        icon: Icon(
+          icon,
+          size: 30,
+          color: Colors.white,
+        )
     );
   }
 }
