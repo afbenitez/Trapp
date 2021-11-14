@@ -78,6 +78,7 @@ class _EnterBudgetState extends State<EnterBudget> {
   OverlayEntry? entry;
   late StreamSubscription subscription;
   final Connectivity _connectivity = Connectivity();
+  late int start;
 
   @override
   void initState() {
