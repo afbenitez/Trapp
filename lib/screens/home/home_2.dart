@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:trapp_flutter/screens/authentication/sign_in.dart';
 // import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/authentication/sign_up_page.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         decoration: const BoxDecoration(
           image: DecorationImage(

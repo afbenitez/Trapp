@@ -1,9 +1,12 @@
+import 'dart:core';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/Widget/circle.dart';
 import 'package:trapp_flutter/screens/authentication/sign_in.dart';
 import 'package:trapp_flutter/screens/authentication/sign_up_page.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,8 +15,11 @@ class Home extends StatelessWidget {
   static FirebaseAnalyticsObserver observer =
   FirebaseAnalyticsObserver(analytics: analytics);
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
@@ -25,6 +31,7 @@ class Home extends StatelessWidget {
         body: _content(context),
       ),
     );
+
   }
 
   Widget _content(context) {
@@ -119,5 +126,6 @@ class Home extends StatelessWidget {
                         ]))
               ])),
     );
+
   }
 }

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:trapp_flutter/services/auth.dart';
@@ -20,11 +22,14 @@ class Settings extends StatelessWidget {
   }
 }
 
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButton: NeumorphicFloatingActionButton(
         child: const Icon(Icons.add, size: 30),
@@ -54,4 +59,7 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+
 }
+
+

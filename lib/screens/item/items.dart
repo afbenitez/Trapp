@@ -2,12 +2,13 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/item.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 import 'package:trapp_flutter/services/item_s.dart';
-
 import 'items.dart';
 
 class AllItems extends StatelessWidget {
@@ -44,11 +45,16 @@ class _ItemsListState extends State<ItemsList> {
   late StreamSubscription subscription;
   final Connectivity _connectivity = Connectivity();
 
+  late int start;
+
+
 
   @override
   void initState() {
     super.initState();
-
+    setState(() {
+      start = DateTime.now().millisecondsSinceEpoch;
+    });
     if(!connection) {
       ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
       connection = true;
