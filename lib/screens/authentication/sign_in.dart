@@ -4,6 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/services/auth.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -33,12 +35,19 @@ class _SignInState extends State<SignIn> {
   OverlayEntry? entry;
   late StreamSubscription subscription;
   var connection = false;
+  final Connectivity _connectivity = Connectivity();
 
   @override
   void initState() {
     super.initState();
+
+    if(!connection)
+    {
+        ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).initConnectivity();
+        connection = true;
+    };
     subscription =
-        Connectivity().onConnectivityChanged.listen(showConnectivitySnackBar);
+        Connectivity().onConnectivityChanged.listen(ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).showConnectivitySnackBar);
   }
 
   @override
@@ -47,35 +56,6 @@ class _SignInState extends State<SignIn> {
     super.dispose();
   }
 
-  void showConnectivitySnackBar(ConnectivityResult result) {
-
-    if( result == ConnectivityResult.none){
-      showOverlay();
-    }
-  }
-
-  showOverlay() async {
-    final overlay = Overlay.of(context)!;
-    final renderbox = context.findRenderObject() as RenderBox;
-    final size = renderbox.size;
-
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        child: InternetMessage(),
-      ),
-    );
-    overlay.insert(entry!);
-
-    await Future.delayed(Duration(seconds: 3));
-
-    entry!.remove();
-
-  }
-
-  buildOverlay() {
-    return InternetMessage();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,13 +232,12 @@ class _SignInState extends State<SignIn> {
                           setState(() => loading = true);
                           dynamic result = await _auth
                               .signInWithEmailAndPassword(email, password);
-                          if (result == null && Connectivity().checkConnectivity() != ConnectivityResult.none) {
+                          if (result == null) {
                             setState(() {
                               loading = false;
                               error =
                                   'Could not sign in with those credentials';
                             });
-                            showOverlay();
                           } else {
                             Navigator.pop(context);
                             await widget.analytics.logEvent(name: 'inicioSesion', parameters: <String, dynamic>{

@@ -6,13 +6,11 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
-import 'package:trapp_flutter/screens/activity/addActivity.dart';
 // import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
-import 'package:trapp_flutter/screens/internetConnection.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
@@ -84,7 +82,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   static const List<Widget> _widgetOptions =
   <Widget>[
     LoadingTrips(),
-    MainPage(title: 'titulo'),
+    NoInternet(),
     Budget(),
     NoInternet(),
     AllItems(),
