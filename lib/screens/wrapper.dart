@@ -15,7 +15,6 @@ import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/internetConnection.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
-import 'package:trapp_flutter/services/user_service.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -36,38 +35,22 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-<<<<<<< HEAD
-class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerProviderStateMixin{
-  late int time;
-=======
 class _MyStatefulWidgetState extends State<MyStatefulWidget>
     with SingleTickerProviderStateMixin {
->>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e
   late TabController _tabController;
   OverlayEntry? entry;
   late StreamSubscription subscription;
 
   @override
-<<<<<<< HEAD
-  void initState(){
-    setState((){
-      time = DateTime.now().millisecondsSinceEpoch;
-    });
-
-=======
   void initState() {
->>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-
   }
 
   @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
-    UserService us = UserService(uid: '');
-    us.setTime('App', (DateTime.now().millisecondsSinceEpoch-time)/1000);
   }
 
   void connectionState(){
@@ -132,10 +115,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 class NavItem extends StatelessWidget {
   const NavItem(
       {Key? key,
-      required this.index,
-      required this.icon,
-      required this.tap,
-      required this.current})
+        required this.index,
+        required this.icon,
+        required this.tap,
+        required this.current})
       : super(key: key);
 
   final int index;
@@ -148,8 +131,8 @@ class NavItem extends StatelessWidget {
     return (index == current)
         ? Neumorphic(
       style: NeumorphicStyle(
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
-        color: const Color(0xFF00AFB9)
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
+          color: const Color(0xFF00AFB9)
       ),
       child: IconButton(
         onPressed: () {
@@ -160,17 +143,17 @@ class NavItem extends StatelessWidget {
           size: 30,
           color: Colors.white,
         ),
-    ),
+      ),
     )
         : IconButton(
-            onPressed: () {
-              tap(index);
-            },
-            icon: Icon(
-              icon,
-              size: 30,
-              color: Colors.white,
-            )
+        onPressed: () {
+          tap(index);
+        },
+        icon: Icon(
+          icon,
+          size: 30,
+          color: Colors.white,
+        )
     );
   }
 }

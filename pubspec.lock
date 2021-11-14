@@ -14,10 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "2.6.1"
-=======
-    version: "2.8.1"
   awesome_dialog:
     dependency: "direct main"
     description:
@@ -25,7 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
->>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e
   boolean_selector:
     dependency: transitive
     description:
@@ -280,7 +276,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.3"
   http_parser:
     dependency: transitive
     description:
@@ -406,7 +402,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "4.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -509,7 +505,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.3.1"
+    version: "5.1.2"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.20.0"

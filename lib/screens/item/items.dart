@@ -1,6 +1,10 @@
 
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/item.dart';
 import 'package:trapp_flutter/services/item_s.dart';
 
@@ -34,6 +38,31 @@ class ItemsList extends StatefulWidget {
 
 
 class _ItemsListState extends State<ItemsList> {
+
+  var connection = false;
+  OverlayEntry? entry;
+  late StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    if(!connection) {
+      ConnectivityStatus(entry: entry, context: context).checkConnectionStatus();
+      connection = true;
+    };
+
+    subscription =
+        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context).showConnectivitySnackBar);
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final items = Provider.of<List<Item>>(context);

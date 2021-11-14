@@ -1,10 +1,5 @@
-<<<<<<< HEAD:lib/main2.dart
-import 'dart:async';
-
-=======
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
->>>>>>> 53c8960632f5f0b1e1156de9c6767a47e549934e:lib/trapp.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
@@ -15,11 +10,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:trapp_flutter/services/auth.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
