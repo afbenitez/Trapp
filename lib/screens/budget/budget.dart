@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
@@ -78,6 +77,7 @@ class _EnterBudgetState extends State<EnterBudget> {
   var connection = false;
   OverlayEntry? entry;
   late StreamSubscription subscription;
+  final Connectivity _connectivity = Connectivity();
 
   @override
   void initState() {
@@ -85,12 +85,12 @@ class _EnterBudgetState extends State<EnterBudget> {
     fetchUserInfo();
 
     if(!connection) {
-      ConnectivityStatus(entry: entry, context: context).checkConnectionStatus();
+      ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
       connection = true;
     };
 
     subscription =
-        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context).showConnectivitySnackBar);
+        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).showConnectivitySnackBar);
   }
 
   @override
@@ -98,7 +98,6 @@ class _EnterBudgetState extends State<EnterBudget> {
     subscription.cancel();
     super.dispose();
   }
-
 
   fetchUserInfo() {
     User? getUser = FirebaseAuth.instance.currentUser;
@@ -316,6 +315,7 @@ class _EnterBudgetState extends State<EnterBudget> {
                           gender,
                           _dailyExpensesList,
                           usersGroup);
+                      Navigator.of(context).pop();
                     }
                   },
                   child: const Center(
