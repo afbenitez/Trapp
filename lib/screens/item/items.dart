@@ -39,22 +39,23 @@ class ItemsList extends StatefulWidget {
 
 class _ItemsListState extends State<ItemsList> {
 
-  var connection = true;
+  var connection = false;
   OverlayEntry? entry;
   late StreamSubscription subscription;
+  final Connectivity _connectivity = Connectivity();
+
 
   @override
   void initState() {
     super.initState();
 
-
     if(!connection) {
-      ConnectivityStatus(entry: entry, context: context).checkConnectionStatus();
-      connection = false;
+      ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
+      connection = true;
     };
 
     subscription =
-        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context).showConnectivitySnackBar);
+        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).showConnectivitySnackBar);
   }
 
   @override
@@ -62,6 +63,7 @@ class _ItemsListState extends State<ItemsList> {
     subscription.cancel();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
