@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';

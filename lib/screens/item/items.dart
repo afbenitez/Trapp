@@ -39,7 +39,7 @@ class ItemsList extends StatefulWidget {
 
 class _ItemsListState extends State<ItemsList> {
 
-  var connection = false;
+  var connection = true;
   OverlayEntry? entry;
   late StreamSubscription subscription;
 
@@ -50,7 +50,7 @@ class _ItemsListState extends State<ItemsList> {
 
     if(!connection) {
       ConnectivityStatus(entry: entry, context: context).checkConnectionStatus();
-      connection = true;
+      connection = false;
     };
 
     subscription =

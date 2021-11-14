@@ -35,19 +35,20 @@ class _RegisterState extends State<SignUp> {
   bool connection = false;
   OverlayEntry? entry;
   late StreamSubscription subscription;
+  final Connectivity _connectivity = Connectivity();
 
   @override
   void initState() {
     super.initState();
 
     if (!connection) {
-      ConnectivityStatus(context: context, entry: entry)
-          .checkConnectionStatus();
+      ConnectivityStatus(context: context, entry: entry, connectivity: _connectivity)
+          .initConnectivity();
       connection = true;
     }
 
     subscription = Connectivity().onConnectivityChanged.listen(
-        ConnectivityStatus(entry: entry, context: context)
+        ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity)
             .showConnectivitySnackBar);
   }
 
