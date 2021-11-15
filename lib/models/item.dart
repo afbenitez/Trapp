@@ -6,4 +6,10 @@ class Item {
 
   Item({ required this.name,required this.uid});
 
+  factory Item.fromData(Map data) {
+    return Item(
+      name: data["name"] ?? "",
+      uid: data["uid"] ?? "",
+    );
+  }
 }

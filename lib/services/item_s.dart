@@ -17,6 +17,5 @@ class ItemService{
     return itemsCollection.snapshots().map(_itemsListFromSnapshot);
   }
 
-
 }
 

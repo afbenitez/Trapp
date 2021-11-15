@@ -1,15 +1,22 @@
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/item.dart';
+import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/services/user_service.dart';
 import 'package:trapp_flutter/services/item_s.dart';
-import 'items.dart';
+
+import 'no_items_internet.dart';
+
+
+
 
 class AllItems extends StatelessWidget {
   const AllItems({Key? key}) : super(key: key);
@@ -47,26 +54,36 @@ class _ItemsListState extends State<ItemsList> {
 
   late int start;
 
+  final Trace myTrace = FirebasePerformance.instance.newTrace("Item Activity");
+
+  bool internetStatus = false;
 
 
   @override
   void initState() {
-    super.initState();
+    myTrace.start();
+    try {
+      InternetAddress.lookup('firebase.google.com').then((result) {
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          setState(() {
+            internetStatus = true;
+          });
+        }
+      });
+    } on SocketException catch (_) {
+      debugPrint('not connected to internet, socketException');
+    }
     setState(() {
       start = DateTime.now().millisecondsSinceEpoch;
     });
-    if(!connection) {
-      ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
-      connection = true;
-    };
+    super.initState();
 
-    subscription =
-        Connectivity().onConnectivityChanged.listen( ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).showConnectivitySnackBar);
   }
 
   @override
   void dispose() {
-    subscription.cancel();
+    myTrace.incrementMetric("Loading Time", (DateTime.now().millisecondsSinceEpoch-start));
+    myTrace.stop();
     super.dispose();
   }
 
@@ -76,64 +93,67 @@ class _ItemsListState extends State<ItemsList> {
     final items = Provider.of<List<Item>>(context);
     bool isSwitched = true;
 
-
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index){
-
-        if(index <= 10){
-          return Card(
-            margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-            color: const Color(0xffEDD83D),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: const Color(0xffEEEEEE),
-                backgroundImage: AssetImage("assets/logo.png"),
-                radius: 23.0,
+    if (!internetStatus)
+      return const NoItemsInternet();
+    else {
+      return ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          if (index <= 10) {
+            return Card(
+              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+              color: const Color(0xffEDD83D),
+              child:  ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xffEEEEEE),
+                  backgroundImage: AssetImage("assets/logo.png"),
+                  radius: 23.0,
+                ),
+                title: Text(items[index].name),
+                trailing: new Switch(
+                  value: true,
+                  activeColor: Colors.yellow,
+                  activeTrackColor: Colors.yellow,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                    });
+                  },
+                ),
               ),
-              title: Text(items[index].name),
-              trailing: new Switch(
-                value: true,
-                activeColor: Colors.yellow,
-                activeTrackColor: Colors.yellow,
-                onChanged: (value){
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },
-              ),
-            ),
-          );
-        }
-        else {
-          return Card(
-            margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-            color: const Color(0xff00AFB9),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: const Color(0xffEEEEEE),
-                backgroundImage: AssetImage("assets/logo.png"),
-                radius: 23.0,
-              ),
-              title: Text(items[index].name),
-              trailing: new Switch(
-                value: false,
-                activeColor: Colors.yellow,
-                activeTrackColor: Colors.yellowAccent,
-                onChanged: (value){
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },
-              ),
-            ),
-          );
-        }
+            );
+          }
 
-      },
-    );
-
+          else {
+            return Card(
+              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+              color: const Color(0xff00AFB9),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xffEEEEEE),
+                  backgroundImage: AssetImage("assets/logo.png"),
+                  radius: 23.0,
+                ),
+                title: Text(items[index].name),
+                trailing: new Switch(
+                  value: false,
+                  activeColor: Colors.yellow,
+                  activeTrackColor: Colors.yellowAccent,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                    });
+                  },
+                ),
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 }
+
+
 
 
