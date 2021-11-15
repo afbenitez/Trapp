@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
+import 'package:trapp_flutter/screens/Trips/tripDetail.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/services/auth.dart';
 import 'package:trapp_flutter/services/trips_service.dart';
@@ -394,7 +395,11 @@ class TripCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("You have pressed ${trip.price}")),
+            SnackBar(content: Text("You have pressed ${trip.destination}")),
+          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              TripDetail(trip: trip,),
+          ),
           );
         },
         child: SizedBox(

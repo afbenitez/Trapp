@@ -228,21 +228,26 @@ class _SignInState extends State<SignIn> {
                     const SizedBox(height: 15),
                     RaisedButton(
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() => loading = true);
-                          dynamic result = await _auth
-                              .signInWithEmailAndPassword(email, password);
-                          if (result == null) {
-                            setState(() {
-                              loading = false;
-                              error =
-                                  'Could not sign in with those credentials';
-                            });
-                          } else {
-                            Navigator.pop(context);
-                            await widget.analytics.logEvent(name: 'inicioSesion', parameters: <String, dynamic>{
-                              'email': email
-                            });
+
+                        if(Connectivity().checkConnectivity() == ConnectivityResult.none){
+                          ConnectivityStatus(connectivity: _connectivity, entry: entry, context: context).showOverlay();
+                        } else {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() => loading = true);
+                            dynamic result = await _auth
+                                .signInWithEmailAndPassword(email, password);
+                            if (result == null) {
+                              setState(() {
+                                loading = false;
+                                error =
+                                'Could not sign in with those credentials';
+                              });
+                            } else {
+                              Navigator.pop(context);
+                              await widget.analytics.logEvent(name: 'inicioSesion', parameters: <String, dynamic>{
+                                'email': email
+                              });
+                            }
                           }
                         }
                       },

@@ -1,9 +1,12 @@
+import 'package:trapp_flutter/models/city.dart';
+
 class Trip {
   final String name;
   final String img;
   final int price;
   final int reviews;
   final double? rating;
+  final Object? destination;
 
   Trip({
     required this.name,
@@ -11,6 +14,7 @@ class Trip {
     required this.reviews,
     required this.rating,
     required this.price,
+    required this.destination,
   });
 
   factory Trip.fromData(Map data) {
@@ -20,6 +24,7 @@ class Trip {
       reviews: data["reviews"] ?? "",
       rating: data["rating"] ?? 0,
       price: data["price"] ?? 0,
+      destination: data["destination"],
     );
   }
 }
