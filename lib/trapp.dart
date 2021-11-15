@@ -3,8 +3,6 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
-import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
-import 'package:trapp_flutter/screens/home/home.dart';
 import 'package:trapp_flutter/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:trapp_flutter/services/auth.dart';
@@ -12,9 +10,7 @@ import 'package:trapp_flutter/services/auth.dart';
 
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_performance/firebase_performance.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:pedantic/pedantic.dart';
 

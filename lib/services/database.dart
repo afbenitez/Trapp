@@ -24,6 +24,7 @@ class DatabaseService {
     return snapshot.docs.map((d) {
       // print(d);
       return Trip(
+          id: d.id,
           name: d.get('name') ?? 'Cartagena',
           img: d.get('img') ?? 'https://picsum.photos/300/200',
           reviews: d.get('reviews')!.length ?? 0,

@@ -6,7 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
-import 'package:trapp_flutter/screens/Trips/loading_trips.dart';
+import 'package:trapp_flutter/screens/Trips/trips.dart';
 // import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';

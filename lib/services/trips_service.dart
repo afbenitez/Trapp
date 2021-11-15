@@ -25,6 +25,7 @@ class TripsService {
     return snapshot.docs.map((d) {
       // print(d);
       return Trip(
+          id: d.id,
           name: d.get('name') ?? 'Cartagena',
           img: d.get('img') ?? 'https://picsum.photos/300/200',
           reviews: d.get('reviews') ?? (d.get('reviews').length ?? 0),
@@ -43,6 +44,7 @@ class TripsService {
     QuerySnapshot qs = await tripsCollection.get();
     return qs.docs
         .map((t) => Trip.fromData({
+              'id': t.id,
               'name': t.get('name')??'trip',
               'img': t.get('img')??'https://picsum.photos/300/200',
               'reviews': t.get('reviews')!.length,
@@ -60,6 +62,7 @@ class TripsService {
     // });
     return qs.docs
         .map((e) => Place.fromData({
+              'id': e.id,
               'name': e.get('name'),
               'address': e.get('address'),
               'img': e.get('img'),

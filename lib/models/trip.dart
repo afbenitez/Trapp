@@ -1,4 +1,5 @@
 class Trip {
+  final String id;
   final String name;
   final String img;
   final int price;
@@ -6,6 +7,7 @@ class Trip {
   final double? rating;
 
   Trip({
+    required this.id,
     required this.name,
     required this.img,
     required this.reviews,
@@ -15,6 +17,7 @@ class Trip {
 
   factory Trip.fromData(Map data) {
     return Trip(
+      id: data["id"]?? "idhandler",
       name: data["name"] ?? "cartage",
       img: data["img"] ?? "",
       reviews: data["reviews"] ?? "",
