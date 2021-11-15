@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:location/location.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
@@ -21,6 +24,8 @@ class LoadingTrips extends StatefulWidget {
 
 class _LoadingTripsState extends State<LoadingTrips> {
   late int start;
+
+  final LocalStorage storage = LocalStorage('trapp_storage');
 
   bool internetStatus = false;
 
@@ -152,13 +157,20 @@ class _LoadingTripsState extends State<LoadingTrips> {
         setState(() {
           places = ps;
         });
+        storage.setItem('places',ps.map((p) {
+          return p.toJSONEncodable();
+        }).toList());
       });
       TripsService().getTripsList().then((ts) {
         setState(() {
           trips = ts;
         });
       });
-    } else {}
+    } else {
+      setState(() {
+        places = storage.getItem('places') ?? [];
+      });
+    }
   }
 
   @override
@@ -166,7 +178,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
     setState(() {
       closePlaces = places
           .where((p) =>
-              p.distance(latitude, longitude) < 9 &&
+              p.distance(latitude, longitude) < 20000 &&
               p.name.contains(keyWordFilter))
           .toList();
       affordableActivities = trips
@@ -375,19 +387,25 @@ class PlaceCard extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      // color: Colors.red,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(place.img),
-                        fit: BoxFit.cover,
+                  SizedBox(
+                    height: 100,
+                    width: 140,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => const Icon(Icons.error, size: 50,),
+                      imageUrl: place.img,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.green,
+                              BlendMode.colorBurn,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    // child: Text(places[index].name)
-                    child: const SizedBox(
-                      width: 140,
-                      height: 100,
                     ),
                   ),
                   const Divider(
@@ -433,19 +451,25 @@ class TripCard extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      // color: Colors.red,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(trip.img),
-                        fit: BoxFit.cover,
+                  SizedBox(
+                    height: 100,
+                    width: 140,
+                    child: CachedNetworkImage(
+                      imageUrl: trip.img,
+                      placeholder: (context, url) => const Icon(Icons.error, size: 50,),
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.grey,
+                              BlendMode.colorBurn,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    // child: Text(places[index].name)
-                    child: const SizedBox(
-                      width: 140,
-                      height: 100,
                     ),
                   ),
                   const Divider(

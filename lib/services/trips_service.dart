@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
 
 class TripsService {
+
+  final Trace dbTrace = FirebasePerformance.instance.newTrace("db");
+
   final CollectionReference tripsCollection =
       FirebaseFirestore.instance.collection('trips');
 
@@ -36,12 +40,17 @@ class TripsService {
   }
 
   //get docs stream
-  Stream<List<Trip>> get trips {
-    return tripsCollection.snapshots().map(_tripListFromSnapshot);
+  Future<Stream<List<Trip>>> get trips async{
+    // await myTrace.start();
+    Stream<List<Trip>> ret = tripsCollection.snapshots().map(_tripListFromSnapshot);
+    // await myTrace.stop();
+    return ret;
   }
 
   Future<List<Trip>> getTripsList() async {
+    await dbTrace.start();
     QuerySnapshot qs = await tripsCollection.get();
+    await dbTrace.stop();
     return qs.docs
         .map((t) => Trip.fromData({
               'id': t.id,
