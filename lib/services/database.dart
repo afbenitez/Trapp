@@ -30,6 +30,7 @@ class DatabaseService {
           reviews: d.get('reviews')!.length ?? 0,
           rating: d.get('reviews')[0]['califiction'] ?? 5,
           price: 0,
+          destination: d.get('destination')
       );
     }).toList();
   }

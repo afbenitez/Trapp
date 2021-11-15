@@ -31,6 +31,7 @@ class TripsService {
           reviews: d.get('reviews') ?? (d.get('reviews').length ?? 0),
           rating: d.get('reviews')[0]['califiction'] ?? 5,
           price: 0,
+          destination: d.get('destination')
       );
     }).toList();
   }
@@ -50,7 +51,8 @@ class TripsService {
               'reviews': t.get('reviews')!.length,
               'rating': t.get('reviews')[0]['califiction'],
               'price': t.get('price'),
-              'activity': t.get('activity') ?? 'activity_1'
+              'activity': t.get('activity') ?? 'activity_1',
+              'destination' : t.get('destination')
             }))
         .toList();
   }
