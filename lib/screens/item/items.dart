@@ -82,14 +82,16 @@ class _ItemsListState extends State<ItemsList> {
 
   @override
   void dispose() {
-    myTrace.incrementMetric("Loading Time", (DateTime.now().millisecondsSinceEpoch-start));
-    myTrace.stop();
     super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    myTrace.stop();
+    UserService us = UserService(uid: '');
+    us.setTimeLoadingTime('Items', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
+
     final items = Provider.of<List<Item>>(context);
     bool isSwitched = true;
 

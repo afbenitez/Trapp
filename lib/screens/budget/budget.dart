@@ -79,6 +79,7 @@ class _EnterBudgetState extends State<EnterBudget> {
   OverlayEntry? entry;
   late StreamSubscription subscription;
   final Connectivity _connectivity = Connectivity();
+
   late int start;
   final Trace myTrace = FirebasePerformance.instance.newTrace("Budget Activity");
 
@@ -88,6 +89,9 @@ class _EnterBudgetState extends State<EnterBudget> {
     fetchUserInfo();
 
     myTrace.start();
+    setState(() {
+      start = DateTime.now().millisecondsSinceEpoch;
+    });
 
     if(!connection) {
       ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
@@ -100,7 +104,6 @@ class _EnterBudgetState extends State<EnterBudget> {
 
   @override
   void dispose() {
-    myTrace.stop();
     subscription.cancel();
     super.dispose();
   }
@@ -125,7 +128,10 @@ class _EnterBudgetState extends State<EnterBudget> {
 
   @override
   Widget build(BuildContext context) {
-    myTrace.start();
+
+    myTrace.stop();
+    UserService us = UserService(uid: '');
+    us.setTimeLoadingTime('Budget', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
     return Column(
             children: [
               Neumorphic(

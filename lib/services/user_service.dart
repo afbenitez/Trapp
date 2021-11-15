@@ -47,5 +47,12 @@ class UserService {
         'time': seconds
       });
   }
+  Future setTimeLoadingTime(String screen, double seconds) async {
+    return FirebaseFirestore.instance.collection('loadingTime')
+      ..doc(screen).set({
+        'activity': screen,
+        'time': seconds
+      });
+  }
 
 }

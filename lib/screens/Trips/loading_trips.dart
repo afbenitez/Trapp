@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -21,7 +22,7 @@ class LoadingTrips extends StatefulWidget {
 
 class _LoadingTripsState extends State<LoadingTrips> {
   late int start;
-
+  final Trace myTrace = FirebasePerformance.instance.newTrace("Trips Activity");
   bool internetStatus = false;
 
   List<Place> places = [];
@@ -124,13 +125,15 @@ class _LoadingTripsState extends State<LoadingTrips> {
 
   @override
   void dispose() {
+    myTrace.stop();
     UserService us = UserService(uid: '');
-    us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
+    us.setTimeLoadingTime('Trips', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
     super.dispose();
   }
 
   @override
   void initState() {
+    myTrace.start();
     try {
       InternetAddress.lookup('firebase.google.com').then((result) {
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -163,6 +166,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
 
   @override
   Widget build(BuildContext context) {
+    myTrace.stop();
     setState(() {
       closePlaces = places
           .where((p) =>
