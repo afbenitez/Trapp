@@ -9,14 +9,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:trapp_flutter/services/auth.dart';
 
 
-<<<<<<< HEAD
-=======
-import 'dart:async';
-
-import 'package:firebase_performance/firebase_performance.dart';
-import 'package:http/http.dart';
-import 'package:pedantic/pedantic.dart';
->>>>>>> 50e758690f8ed5b9b59dbc8fc20d0bc1a531fa42
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
