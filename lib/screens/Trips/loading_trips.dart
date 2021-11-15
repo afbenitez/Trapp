@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
-import 'package:trapp_flutter/screens/connectivity/message.dart';
-import 'package:trapp_flutter/services/auth.dart';
+import 'package:trapp_flutter/screens/Trips/no_trips_internet.dart';
 import 'package:trapp_flutter/services/trips_service.dart';
 import 'package:trapp_flutter/services/user_service.dart';
 
@@ -18,8 +20,9 @@ class LoadingTrips extends StatefulWidget {
 }
 
 class _LoadingTripsState extends State<LoadingTrips> {
-
   late int start;
+
+  bool internetStatus = false;
 
   List<Place> places = [];
   List<Place> closePlaces = [];
@@ -122,201 +125,230 @@ class _LoadingTripsState extends State<LoadingTrips> {
   @override
   void dispose() {
     UserService us = UserService(uid: '');
-    us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch-start)/1000);
+    us.setTime('Trips', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
     super.dispose();
   }
 
   @override
   void initState() {
+    try {
+      InternetAddress.lookup('firebase.google.com').then((result) {
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          setState(() {
+            internetStatus = true;
+          });
+        }
+      });
+    } on SocketException catch (_) {
+      debugPrint('not connected to internet, socketException');
+    }
     setState(() {
       start = DateTime.now().millisecondsSinceEpoch;
     });
     super.initState();
     setLocation();
-    TripsService().getPlacesList().then((ps) {
-      setState(() {
-        places = ps;
+    if (!internetStatus) {
+      TripsService().getPlacesList().then((ps) {
+        setState(() {
+          places = ps;
+        });
       });
-    });
-    TripsService().getTripsList().then((ts) {
-      setState(() {
-        trips = ts;
+      TripsService().getTripsList().then((ts) {
+        setState(() {
+          trips = ts;
+        });
       });
-    });
+    } else {}
   }
 
   @override
   Widget build(BuildContext context) {
     setState(() {
-      closePlaces =
-          places.where((p) => p.distance(latitude, longitude) < 9 && p.name.contains(keyWordFilter)).toList();
-      affordableActivities =
-          trips.where((t) =>
-          t.price <= budget
+      closePlaces = places
+          .where((p) =>
+              p.distance(latitude, longitude) < 9 &&
+              p.name.contains(keyWordFilter))
+          .toList();
+      affordableActivities = trips
+          .where((t) => t.price <= budget
               // && t.name.contains(keyWordFilter)
-                ).toList();
+              )
+          .toList();
       // affordablePlaces = places.where((p) => p < 4).toList();
     });
 
     final Size size = MediaQuery.of(context).size;
 
-    return places.isEmpty
-        ? const CircularProgressIndicator(
-            strokeWidth: 5.0,
-          )
-        : SingleChildScrollView(
-              // physics: const BouncingScrollPhysics(),
-              child: Container(
-                width: size.width,
-                // height: size.height,
-                color: const Color(0xFFC7E7E9),
+    return SingleChildScrollView(
+      // physics: const BouncingScrollPhysics(),
+      child: Container(
+        width: size.width,
+        // height: size.height,
+        color: const Color(0xFFC7E7E9),
 
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 45),
-                // color: NeumorphicTheme.baseColor(context),
-                child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    // crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const <Widget>[
-                          Text(
-                            'Plan your trip',
-                            style: TextStyle(
-                              fontFamily: 'thaBold',
-                              fontSize: 35,
-                            ),
-                          ),
-                          CircleAvatar(
-                            backgroundImage: AssetImage('assets/logoTrapp.png'),
-                            backgroundColor: Colors.transparent,
-                            radius: 20,
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: Neumorphic(
-                              style: NeumorphicStyle(
-                                  depth: -8,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(20))),
-                              child: TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    keyWordFilter = value;
-                                  });
-                                },
-                                decoration: const InputDecoration(
-                                    // border: OutlineInputBorder(),
-                                    // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                    icon: Padding(
-                                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                        child: Icon(Icons.explore)),
-                                    hintText: 'Search'),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                   budget = 20000000;
-                                });
-                              },
-                              icon: const Icon(Icons.filter_alt_outlined)),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(" \u00240"),
-                          Expanded(
-                              child: Slider(
-                            onChanged: (double value) {
-                              setState(() {
-                                budget = value;
-                              });
-                            },
-                            divisions: 5,
-                            max: 100000000,
-                            min: 0,
-                            value: budget,
-                          )),
-                          Text('\u0024${(budget / 1000).floor()}k'),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                              color: Colors.blue,
-                              onPressed: () {
-                                _displayTextInputDialog(context);
-                              },
-                              icon: const Icon(Icons.edit)),
-                        ],
-                      ),
-                      const Text(
-                        'For your budget',
-                        style: TextStyle(
-                          fontFamily: 'thaBold',
-                          fontSize: 25,
-                        ),
-                      ),
-                      const Divider(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        height: 225,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: affordableActivities.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TripCard(trip: affordableActivities[index]),
-                            );
-                          },
-                        ),
-                      ),
-                      const Divider(
-                        height: 15,
-                      ),
-                      const Text(
-                        'Places near to you',
-                        style: TextStyle(
-                          fontFamily: 'thaBold',
-                          fontSize: 25,
-                        ),
-                      ),
-                      const Divider(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        height: 225,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: closePlaces.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: PlaceCard(place: closePlaces[index]),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      )
-                    ]),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 45),
+        // color: NeumorphicTheme.baseColor(context),
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const <Widget>[
+                  Text(
+                    'Plan your trip',
+                    style: TextStyle(
+                      fontFamily: 'thaBold',
+                      fontSize: 35,
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/logoTrapp.png'),
+                    backgroundColor: Colors.transparent,
+                    radius: 20,
+                  )
+                ],
               ),
-            );
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Neumorphic(
+                      style: NeumorphicStyle(
+                          depth: -8,
+                          boxShape: NeumorphicBoxShape.roundRect(
+                              BorderRadius.circular(20))),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            keyWordFilter = value;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                            // border: OutlineInputBorder(),
+                            // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                            icon: Padding(
+                                padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                child: Icon(Icons.explore)),
+                            hintText: 'Search'),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          budget = 20000000;
+                        });
+                      },
+                      icon: const Icon(Icons.filter_alt_outlined)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(" \u00240"),
+                  Expanded(
+                      child: Slider(
+                    onChanged: (double value) {
+                      setState(() {
+                        budget = value;
+                      });
+                    },
+                    divisions: 5,
+                    max: 100000000,
+                    min: 0,
+                    value: budget,
+                  )),
+                  Text('\u0024${(budget / 1000).floor()}k'),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                      color: Colors.blue,
+                      onPressed: () {
+                        _displayTextInputDialog(context);
+                      },
+                      icon: const Icon(Icons.edit)),
+                ],
+              ),
+              const Text(
+                'For your budget',
+                style: TextStyle(
+                  fontFamily: 'thaBold',
+                  fontSize: 25,
+                ),
+              ),
+              const Divider(
+                height: 15,
+              ),
+              SizedBox(
+                height: !internetStatus || trips.isEmpty ? 120 : 225,
+                child: !internetStatus
+                    ? const NoTripsInternet()
+                    : trips.isEmpty
+                        ? const SpinKitWave(
+                            // SpinningLines(
+                            color: Color(0xFF00AFB9),
+                            size: 90.0,
+                            // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: affordableActivities.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child:
+                                    TripCard(trip: affordableActivities[index]),
+                              );
+                            },
+                          ),
+              ),
+              const Divider(
+                height: 15,
+              ),
+              const Text(
+                'Places near to you',
+                style: TextStyle(
+                  fontFamily: 'thaBold',
+                  fontSize: 25,
+                ),
+              ),
+              const Divider(
+                height: 15,
+              ),
+              SizedBox(
+                height: 225,
+                child: places.isEmpty
+                        ? const SpinKitWave(
+                            // SpinningLines(
+                            color: Color(0xFF00AFB9),
+                            size: 90.0,
+                            // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: closePlaces.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: PlaceCard(place: closePlaces[index]),
+                              );
+                            },
+                          ),
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ]),
+      ),
+    );
   }
 }
 
@@ -362,9 +394,7 @@ class PlaceCard extends StatelessWidget {
                     height: 35,
                   ),
                   Neumorphic(
-                    style: const NeumorphicStyle(
-                        depth: -5
-                    ),
+                    style: const NeumorphicStyle(depth: -5),
                     child: SizedBox(
                       width: 115,
                       height: 35,
@@ -422,17 +452,16 @@ class TripCard extends StatelessWidget {
                     height: 35,
                   ),
                   Neumorphic(
-                    style: const NeumorphicStyle(
-                      depth: -5
-                    ),
+                    style: const NeumorphicStyle(depth: -5),
                     child: SizedBox(
                       width: 115,
                       height: 35,
                       // child: Center(child: Text(trip.price.toString())),
-                      child: Center(child: Text(' \u0024${NumberFormat("#,##0.00", "en_US").format(trip.price)}')),
+                      child: Center(
+                          child: Text(
+                              ' \u0024${NumberFormat("#,##0.00", "en_US").format(trip.price)}')),
                     ),
-                    ),
-
+                  ),
                 ],
               )),
         ),

@@ -7,7 +7,7 @@ class TripsService {
       FirebaseFirestore.instance.collection('trips');
 
   final CollectionReference placesCollection =
-      FirebaseFirestore.instance.collection('places_test');
+      FirebaseFirestore.instance.collection('places');
 
   //To call this method is executed: await TripService().updateTripData(tid, name)
   Future updateTripData(String tid, String name) async {

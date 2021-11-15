@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math.dart';
+
 class Place {
   final String name;
   final String img;
@@ -16,12 +19,20 @@ class Place {
   });
 
   double distance( double lat, double lng){
-        var p = 0.017453292519943295;
-        var c = cos;
-        var a = 0.5 - c((lat - latitude) * p)/2 +
-            c(latitude * p) * c(lat * p) *
-                (1 - c((lng - longitude) * p))/2;
-        return 12742 * asin(sqrt(a));
+
+    // distance between latitudes and longitudes
+    double dLat = radians(lat - latitude);
+    double dLon = radians(lng - longitude);
+
+    // convert to radians
+    double radLat1 = radians(latitude);
+    double radLat2 = radians(lat);
+
+    // apply formulae
+    num a = pow(sin(dLat/2),2) + pow(sin(dLon/2),2) * cos(radLat1) * cos(radLat2);
+    int rad = 6371;
+    double c = 2 * asin(sqrt(a));
+    return rad * c;
   }
 
   factory Place.fromData(Map data) {
