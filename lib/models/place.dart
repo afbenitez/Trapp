@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart';
 
 class Place {
+  final String id;
   final String name;
   final String img;
   final String address;
@@ -11,6 +12,7 @@ class Place {
   final double longitude;
 
   Place({
+    required this.id,
     required this.name,
     required this.img,
     required this.address,
@@ -37,6 +39,7 @@ class Place {
 
   factory Place.fromData(Map data) {
     return Place(
+      id: data["id"],
       name: data["name"] ?? "",
       img: data["img"] ?? "",
       address: data["address"] ?? "",
