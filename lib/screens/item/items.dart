@@ -45,7 +45,7 @@ class ItemsList extends StatefulWidget {
 }
 
 
-class _ItemsListState extends State<ItemsList> {
+class _ItemsListState extends State<ItemsList>{
 
   var connection = false;
   OverlayEntry? entry;
@@ -60,21 +60,21 @@ class _ItemsListState extends State<ItemsList> {
 
 
   @override
-  void initState() {
+  void initState()  {
     myTrace.start();
     try {
       InternetAddress.lookup('firebase.google.com').then((result) {
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          setState(() {
-            internetStatus = true;
+          setState(() async {
+            internetStatus = await true;
           });
         }
       });
     } on SocketException catch (_) {
       debugPrint('not connected to internet, socketException');
     }
-    setState(() {
-      start = DateTime.now().millisecondsSinceEpoch;
+    setState(() async {
+      start = await DateTime.now().millisecondsSinceEpoch;
     });
     super.initState();
 
@@ -87,7 +87,7 @@ class _ItemsListState extends State<ItemsList> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     myTrace.stop();
     UserService us = UserService(uid: '');
     us.setTimeLoadingTime('Items', (DateTime.now().millisecondsSinceEpoch - start) / 1000);

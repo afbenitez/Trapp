@@ -5,7 +5,7 @@ class ItemService{
   final CollectionReference itemsCollection = FirebaseFirestore.instance.collection('items');
 
   List<Item> _itemsListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
+    return  snapshot.docs.map((doc) {
       return Item(
         uid: doc.id,
         name: doc['name'] ?? '',
@@ -14,7 +14,7 @@ class ItemService{
   }
 
   Stream<List<Item>> get items {
-    return itemsCollection.snapshots().map(_itemsListFromSnapshot);
+    return  itemsCollection.snapshots().map(_itemsListFromSnapshot);
   }
 
 }

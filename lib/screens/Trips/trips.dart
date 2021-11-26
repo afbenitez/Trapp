@@ -1,17 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
-<<<<<<< HEAD
 import 'package:firebase_performance/firebase_performance.dart';
-=======
-import 'package:cached_network_image/cached_network_image.dart';
->>>>>>> d556b23df07a7e63a9b6fe7b751a62f31b6d33af
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:location/location.dart';
 import 'package:trapp_flutter/models/place.dart';
 import 'package:trapp_flutter/models/trip.dart';
@@ -34,13 +28,7 @@ class LoadingTrips extends StatefulWidget {
 
 class _LoadingTripsState extends State<LoadingTrips> {
   late int start;
-<<<<<<< HEAD
   final Trace myTrace = FirebasePerformance.instance.newTrace("Trips Activity");
-=======
-
-  final LocalStorage storage = LocalStorage('trapp_storage');
-
->>>>>>> d556b23df07a7e63a9b6fe7b751a62f31b6d33af
   bool internetStatus = false;
 
   List<Place> places = [];
@@ -73,7 +61,7 @@ class _LoadingTripsState extends State<LoadingTrips> {
               style: NeumorphicStyle(
                 depth: -8,
                 boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+                NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -136,9 +124,9 @@ class _LoadingTripsState extends State<LoadingTrips> {
       }
     }
     location.getLocation().then((ld) => setState(() {
-          latitude = ld.latitude!;
-          longitude = ld.longitude!;
-        }));
+      latitude = ld.latitude!;
+      longitude = ld.longitude!;
+    }));
   }
 
   @override
@@ -173,20 +161,13 @@ class _LoadingTripsState extends State<LoadingTrips> {
         setState(() {
           places = ps;
         });
-        storage.setItem('places',ps.map((p) {
-          return p.toJSONEncodable();
-        }).toList());
       });
       TripsService().getTripsList().then((ts) {
         setState(() {
           trips = ts;
         });
       });
-    } else {
-      setState(() {
-        places = storage.getItem('places') ?? [];
-      });
-    }
+    } else {}
   }
 
   @override
@@ -195,13 +176,13 @@ class _LoadingTripsState extends State<LoadingTrips> {
     setState(() {
       closePlaces = places
           .where((p) =>
-              p.distance(latitude, longitude) < 20000 &&
-              p.name.contains(keyWordFilter))
+      p.distance(latitude, longitude) < 9 &&
+          p.name.contains(keyWordFilter))
           .toList();
       affordableActivities = trips
           .where((t) => t.price <= budget
-              // && t.name.contains(keyWordFilter)
-              )
+        // && t.name.contains(keyWordFilter)
+      )
           .toList();
       // affordablePlaces = places.where((p) => p < 4).toList();
     });
@@ -255,8 +236,8 @@ class _LoadingTripsState extends State<LoadingTrips> {
                           });
                         },
                         decoration: const InputDecoration(
-                            // border: OutlineInputBorder(),
-                            // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          // border: OutlineInputBorder(),
+                          // contentPadding: EdgeInsets.symmetric(horizontal: 10),
                             icon: Padding(
                                 padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                 child: Icon(Icons.explore)),
@@ -282,16 +263,16 @@ class _LoadingTripsState extends State<LoadingTrips> {
                   const Text(" \u00240"),
                   Expanded(
                       child: Slider(
-                    onChanged: (double value) {
-                      setState(() {
-                        budget = value;
-                      });
-                    },
-                    divisions: 5,
-                    max: 100000000,
-                    min: 0,
-                    value: budget,
-                  )),
+                        onChanged: (double value) {
+                          setState(() {
+                            budget = value;
+                          });
+                        },
+                        divisions: 5,
+                        max: 100000000,
+                        min: 0,
+                        value: budget,
+                      )),
                   Text('\u0024${(budget / 1000).floor()}k'),
                   const SizedBox(
                     width: 10,
@@ -319,24 +300,24 @@ class _LoadingTripsState extends State<LoadingTrips> {
                 child: !internetStatus
                     ? const NoTripsInternet()
                     : trips.isEmpty
-                        ? const SpinKitWave(
-                            // SpinningLines(
-                            color: Color(0xFF00AFB9),
-                            size: 90.0,
-                            // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: affordableActivities.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child:
-                                    TripCard(trip: affordableActivities[index]),
-                              );
-                            },
-                          ),
+                    ? const SpinKitWave(
+                  // SpinningLines(
+                  color: Color(0xFF00AFB9),
+                  size: 90.0,
+                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                )
+                    : ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: affordableActivities.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                      TripCard(trip: affordableActivities[index]),
+                    );
+                  },
+                ),
               ),
               const Divider(
                 height: 15,
@@ -354,23 +335,23 @@ class _LoadingTripsState extends State<LoadingTrips> {
               SizedBox(
                 height: 225,
                 child: places.isEmpty
-                        ? const SpinKitWave(
-                            // SpinningLines(
-                            color: Color(0xFF00AFB9),
-                            size: 90.0,
-                            // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: closePlaces.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: PlaceCard(place: closePlaces[index]),
-                              );
-                            },
-                          ),
+                    ? const SpinKitWave(
+                  // SpinningLines(
+                  color: Color(0xFF00AFB9),
+                  size: 90.0,
+                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                )
+                    : ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: closePlaces.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: PlaceCard(place: closePlaces[index]),
+                    );
+                  },
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -404,25 +385,19 @@ class PlaceCard extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 100,
-                    width: 140,
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => const Icon(Icons.error, size: 50,),
-                      imageUrl: place.img,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.green,
-                              BlendMode.colorBurn,
-                            ),
-                          ),
-                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(place.img),
+                        fit: BoxFit.cover,
                       ),
+                    ),
+                    // child: Text(places[index].name)
+                    child: const SizedBox(
+                      width: 140,
+                      height: 100,
                     ),
                   ),
                   const Divider(
@@ -472,25 +447,19 @@ class TripCard extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 100,
-                    width: 140,
-                    child: CachedNetworkImage(
-                      imageUrl: trip.img,
-                      placeholder: (context, url) => const Icon(Icons.error, size: 50,),
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.grey,
-                              BlendMode.colorBurn,
-                            ),
-                          ),
-                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(trip.img),
+                        fit: BoxFit.cover,
                       ),
+                    ),
+                    // child: Text(places[index].name)
+                    child: const SizedBox(
+                      width: 140,
+                      height: 100,
                     ),
                   ),
                   const Divider(
