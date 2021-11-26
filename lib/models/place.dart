@@ -37,6 +37,19 @@ class Place {
     return rad * c;
   }
 
+  toJSONEncodable() {
+    Map<String, dynamic> m = new Map();
+
+    m['id'] = id;
+    m['name'] = name;
+    m['img'] = img;
+    m['address'] = address;
+    m['latitude'] = latitude;
+    m['longitude'] = longitude;
+
+    return m;
+  }
+
   factory Place.fromData(Map data) {
     return Place(
       id: data["id"],
