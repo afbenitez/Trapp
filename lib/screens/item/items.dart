@@ -60,8 +60,8 @@ class _ItemsListState extends State<ItemsList>{
 
 
   @override
-  void initState()  {
-    myTrace.start();
+  void initState() async {
+    await myTrace.start();
     try {
       InternetAddress.lookup('firebase.google.com').then((result) {
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
