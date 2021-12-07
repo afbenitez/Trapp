@@ -79,6 +79,7 @@ class TripsService {
               'img': e.get('img'),
               'latitude': e.get('latitude'),
               'longitude': e.get('longitude'),
+              'reviews': e.get('reviews')
             }))
         .toList();
     // return [];

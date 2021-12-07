@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 class UserService {
 
-  final String uid;
+  late final String uid;
   UserService({ required this.uid });
 
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -20,7 +20,7 @@ class UserService {
 
   Future<void> updateUserData(
       String name, String lastName, String phone, String birthday, String email, String gender, List dailyExpenses, List userGroups) async {
-    return await users.doc(uid).set({
+    return users.doc(uid).set({
       'firstName': name,
       'lastName': lastName,
       'phone': phone,
@@ -48,4 +48,19 @@ class UserService {
       });
   }
 
+  Future fetchUserInfo() async {
+    User? getUser = FirebaseAuth.instance.currentUser;
+    uid = getUser!.uid;
+    var document =
+    FirebaseFirestore.instance.collection('users').doc(uid);
+    document.get().then((u) {
+      name = u.get('firstName');
+      lastName = u.get('lastName');
+      email = u.get('email');
+      phone = u.get('phone');
+      birthday = u.get('birthday');
+      gender = u.get('gender');
+      dailyExpenses = u.get('dailyExpenses');
+    });
+  }
 }

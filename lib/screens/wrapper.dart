@@ -14,6 +14,8 @@ import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
+import 'package:trapp_flutter/screens/places/tabs.dart';
+import 'package:trapp_flutter/screens/profile/profile.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
 class Wrapper extends StatelessWidget {
@@ -66,7 +68,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
     NoInternet(),
     AllItems(),
     Settings(),
-    NoInternet(),
+    Profile(),
   ];
 
   void _onItemTapped(int index) {
@@ -117,7 +119,7 @@ class NavItem extends StatelessWidget {
         },
         icon: Icon(
           icon,
-          size: 30,
+          size: 25,
           color: Colors.white,
         ),
       ),
@@ -128,7 +130,7 @@ class NavItem extends StatelessWidget {
         },
         icon: Icon(
           icon,
-          size: 30,
+          size: 25,
           color: Colors.white,
         )
     );
@@ -145,14 +147,14 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
       child: Neumorphic(
           style: NeumorphicStyle(
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
             color: const Color(0xFF00AFB9),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
