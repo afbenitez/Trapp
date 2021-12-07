@@ -10,9 +10,7 @@ class TripDetail extends StatelessWidget {
 
   getDestination(){
     CollectionReference cities = FirebaseFirestore.instance.collection('cities');
-
-    print('hola ${trip.destination}');
-
+    // print('hola ${trip.destination}');
   }
 
   @override
@@ -21,7 +19,7 @@ class TripDetail extends StatelessWidget {
     double size = MediaQuery.of(context).size.height/3;
     int idPlan = 101;
     return Container(
-      color: Color(0xFFC7E7E9),
+      color: const Color(0xFFC7E7E9),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
           child: Column(
@@ -126,12 +124,12 @@ class TripDetail extends StatelessWidget {
 
   Future<void> updatePlansMario(int price) async{
     int idPlan=0;
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now();
     CollectionReference plans = FirebaseFirestore.instance.collection('plansMario');
     plans.get().then((value) async {
-      print('valor actual ${value.docs.length}');
+      // print('valor actual ${value.docs.length}');
       idPlan = value.docs.length+1;
-      print(idPlan);
+      // print(idPlan);
       return await plans.doc('plan_$idPlan').set({
         'active': true,
         'activities': [44, 60, 70, 80],

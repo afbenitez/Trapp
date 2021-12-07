@@ -23,7 +23,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User_fb?>(context);
-    print("nana ${user?.uid}");
+    // print("nana ${user?.uid}");
     return (user == null) ? const Home() : const MyStatefulWidget();
   }
 }
