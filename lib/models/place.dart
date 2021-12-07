@@ -61,7 +61,7 @@ class Place {
       address: data["address"] ?? "",
       latitude: data["latitude"] ?? 0,
       longitude: data["longitude"] ?? 0,
-      reviews: data["reviews"]
+      reviews: data["reviews"] ?? List.empty()
     );
   }
 }

@@ -14,7 +14,8 @@ class Review extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Container(
               child: Text(
-                '${place.reviews[index]['calification']}'
+                'hola'
+                // '${place.reviews[index]['califiction']}'
               ),
             );
           },

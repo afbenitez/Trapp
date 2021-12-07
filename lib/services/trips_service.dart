@@ -72,15 +72,24 @@ class TripsService {
     //   print(element.data());
     // });
     return qs.docs
-        .map((e) => Place.fromData({
-              'id': e.id,
-              'name': e.get('name'),
-              'address': e.get('address'),
-              'img': e.get('img'),
-              'latitude': e.get('latitude'),
-              'longitude': e.get('longitude'),
-              'reviews': e.get('reviews')
-            }))
+        .map((e){
+          List revs;
+          try{
+            revs = e.get('reviews');
+          }
+          catch(e){
+            revs = List.empty();
+          }
+      return Place.fromData({
+        'id': e.id,
+        'name': e.get('name'),
+        'address': e.get('address'),
+        'img': e.get('img'),
+        'latitude': e.get('latitude'),
+        'longitude': e.get('longitude'),
+        'reviews': revs
+      });
+    })
         .toList();
     // return [];
   }
