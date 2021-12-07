@@ -43,6 +43,7 @@ class _HeadingState extends State<Heading> {
   Widget build(BuildContext context) {
     final size = 130.0;
     return Container(
+      color: Color(0xFFC7E7E9),
       child: Column(children: [
         Row(
           children: [

@@ -16,6 +16,7 @@ import 'package:trapp_flutter/screens/Trips/no_trips_internet.dart';
 
 import 'package:trapp_flutter/screens/Trips/tripDetail.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';
+import 'package:trapp_flutter/screens/places/tabs.dart';
 import 'package:trapp_flutter/services/auth.dart';
 
 import 'package:trapp_flutter/services/trips_service.dart';
@@ -386,6 +387,8 @@ class PlaceCard extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("You have pressed ${place.img}")),
           );
+          
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TabMenu(place: place,) ));
         },
         child: SizedBox(
           width: 155,
