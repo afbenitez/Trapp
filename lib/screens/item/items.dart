@@ -60,21 +60,21 @@ class _ItemsListState extends State<ItemsList>{
 
 
   @override
-  void initState() async {
-    await myTrace.start();
+  void initState()  {
+     myTrace.start();
     try {
       InternetAddress.lookup('firebase.google.com').then((result) {
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          setState(() async {
-            internetStatus = await true;
+          setState(()  {
+            internetStatus =  true;
           });
         }
       });
     } on SocketException catch (_) {
       debugPrint('not connected to internet, socketException');
     }
-    setState(() async {
-      start = await DateTime.now().millisecondsSinceEpoch;
+    setState(()  {
+      start =  DateTime.now().millisecondsSinceEpoch;
     });
     super.initState();
 
