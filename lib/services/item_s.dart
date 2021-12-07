@@ -17,5 +17,18 @@ class ItemService{
     return  itemsCollection.snapshots().map(_itemsListFromSnapshot);
   }
 
+  Future<List<Item>?> getItems() async {
+
+    QuerySnapshot qs = await itemsCollection.get();
+
+    return qs.docs
+        .map((i) => Item.fromData({
+      'name': i.get('name'),
+      'uid': i.id,
+
+    }))
+        .toList();
+  }
+
 }
 

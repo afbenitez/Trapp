@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/item.dart';
@@ -56,7 +57,11 @@ class _ItemsListState extends State<ItemsList>{
 
   final Trace myTrace = FirebasePerformance.instance.newTrace("Item Activity");
 
+  final LocalStorage storage = LocalStorage('trapp_storage');
+
   bool internetStatus = false;
+
+  List<Item> items = [];
 
 
   @override
@@ -77,7 +82,16 @@ class _ItemsListState extends State<ItemsList>{
       start =  DateTime.now().millisecondsSinceEpoch;
     });
     super.initState();
+     if (!internetStatus) {
 
+       ItemService().getItems().then((ts) {
+         setState(() {
+
+
+           items = ts!;
+         });
+       });
+     }
   }
 
   @override
