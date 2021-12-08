@@ -47,6 +47,13 @@ class UserService {
         'time': seconds
       });
   }
+  Future setTimeLoadingTime(String screen, double seconds) async {
+    return FirebaseFirestore.instance.collection('loadingTime')
+      ..doc(screen).set({
+        'activity': screen,
+        'time': seconds
+      });
+  }
 
   Future fetchUserInfo() async {
     User? getUser = FirebaseAuth.instance.currentUser;

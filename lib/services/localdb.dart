@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:path_provider/path_provider.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
@@ -22,15 +22,16 @@ class DBProvider {
   initDB() async {
     return await openDatabase('trapp_db.db',
         onCreate: (Database db, int version) async {
-        await db.execute(
-          "CREATE TABLE Places ("
-            "id TEXT PRIMARY KEY,"
-            "name TEXT,"
-            "img TEXT,"
-            "address TEXT,"
-            "latitude REAL,"
-            "longitude REAL,"
-          ")");
-    });
+          await db.execute(
+              "CREATE TABLE Places ("
+                  "id TEXT PRIMARY KEY,"
+                  "name TEXT,"
+                  "img TEXT,"
+                  "address TEXT,"
+                  "latitude REAL,"
+                  "longitude REAL,"
+                  ")");
+        });
   }
 }
+

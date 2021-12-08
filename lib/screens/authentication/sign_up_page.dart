@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/dailyExpenses.dart';
 import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/services/auth.dart';
+import 'package:trapp_flutter/services/user_service.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -37,9 +39,17 @@ class _RegisterState extends State<SignUp> {
   late StreamSubscription subscription;
   final Connectivity _connectivity = Connectivity();
 
+  late int start;
+
+  final Trace myTrace = FirebasePerformance.instance.newTrace("SingIn Activity");
+
   @override
   void initState() {
     super.initState();
+    myTrace.start();
+    setState(() {
+      start = DateTime.now().millisecondsSinceEpoch;
+    });
 
     if (!connection) {
       ConnectivityStatus(context: context, entry: entry, connectivity: _connectivity)
@@ -62,6 +72,11 @@ class _RegisterState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+
+    myTrace.stop();
+    UserService us = UserService(uid: '');
+    us.setTimeLoadingTime('Items', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
+
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
