@@ -17,6 +17,8 @@ import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
+import 'PlanCost/cost_plan.dart';
+
 class Wrapper extends StatelessWidget {
 
   const Wrapper({Key? key}) : super(key: key);
@@ -63,7 +65,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   static const List<Widget> _widgetOptions =
   <Widget>[
     LoadingTrips(),
-    NoInternet(),
+    costPlan(),
     Budget(),
     NoInternet(),
     AllItems(),
