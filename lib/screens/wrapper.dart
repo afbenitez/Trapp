@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,8 @@ import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
 import 'package:trapp_flutter/screens/profile/profile.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
+
+import 'PlanCost/cost_plan.dart';
 
 class Wrapper extends StatelessWidget {
 
@@ -58,10 +61,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   int _selectedIndex = 3;
 
+
   static const List<Widget> _widgetOptions =
   <Widget>[
     LoadingTrips(),
-    NoInternet(),
+    costPlan(),
     Budget(),
     NoInternet(),
     AllItems(),

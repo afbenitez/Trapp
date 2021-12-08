@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -78,12 +79,19 @@ class _EnterBudgetState extends State<EnterBudget> {
   OverlayEntry? entry;
   late StreamSubscription subscription;
   final Connectivity _connectivity = Connectivity();
+
   late int start;
+  final Trace myTrace = FirebasePerformance.instance.newTrace("Budget Activity");
 
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
+
+    myTrace.start();
+    setState(() {
+      start = DateTime.now().millisecondsSinceEpoch;
+    });
 
     if(!connection) {
       ConnectivityStatus(connectivity: _connectivity, context: context, entry: entry).initConnectivity();
@@ -120,6 +128,10 @@ class _EnterBudgetState extends State<EnterBudget> {
 
   @override
   Widget build(BuildContext context) {
+
+    myTrace.stop();
+    UserService us = UserService(uid: '');
+    us.setTimeLoadingTime('Budget', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
     return Column(
             children: [
               Neumorphic(
