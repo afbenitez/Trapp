@@ -64,10 +64,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   static const List<Widget> _widgetOptions =
   <Widget>[
-    LoadingTrips(),
+    NoInternet(),
     costPlan(),
     Budget(),
-    NoInternet(),
+    LoadingTrips(),
     AllItems(),
     Settings(),
     Profile(),
