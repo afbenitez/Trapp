@@ -488,7 +488,7 @@ class TripCard extends StatelessWidget {
               ),
             ),
           ).then((value) => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Successfully added trip")),
+                const SnackBar(content: Text("Successfully added trip")),
               ));
         },
         child: SizedBox(

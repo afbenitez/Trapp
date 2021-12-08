@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/place.dart';
+import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/places/overview.dart';
 import 'package:trapp_flutter/screens/places/review.dart';
 
@@ -13,14 +14,13 @@ class TabMenu extends StatefulWidget {
 
   const TabMenu({Key? key, required this.place}) : super(key: key);
 
-  _TabMenuState createState() => _TabMenuState(place: place);
+  @override
+  _TabMenuState createState() => _TabMenuState();
 }
 
 class _TabMenuState extends State<TabMenu>{
 
-  final Place place;
-
-  _TabMenuState({ required this.place});
+  late Place place;
 
   bool internetStatus = false;
   OverlayEntry? entry;
@@ -29,13 +29,14 @@ class _TabMenuState extends State<TabMenu>{
 
   @override
   void initState() {
+    place = widget.place;
     // TODO: implement initState
     super.initState();
     if(!internetStatus)
     {
       ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).initConnectivity();
       internetStatus = true;
-    };
+    }
     subscription =
         Connectivity().onConnectivityChanged.listen(ConnectivityStatus(entry: entry, context: context, connectivity: _connectivity).showConnectivitySnackBar);
   }
@@ -50,7 +51,7 @@ class _TabMenuState extends State<TabMenu>{
     final size = MediaQuery.of(context).size.width;
     return MaterialApp(
       home: DefaultTabController(
-        length: 1,
+        length: 2,
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(300),
@@ -114,6 +115,7 @@ class _TabMenuState extends State<TabMenu>{
           body: TabBarView(
             children: [
               Overview(place: place),
+              Review(place: place)
             ],
           ),
           backgroundColor: Color(0xffC7E7E9),
