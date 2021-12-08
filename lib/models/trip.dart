@@ -19,6 +19,19 @@ class Trip {
     required this.destination,
   });
 
+  toJSONEncodable() {
+    Map<String, dynamic> m = {};
+
+    m['id'] = id;
+    m['name'] = name;
+    m['img'] = img;
+    m['price'] = price;
+    m['reviews'] = reviews;
+    m['rating'] = rating;
+
+    return m;
+  }
+
   factory Trip.fromData(Map data) {
     return Trip(
       id: data["id"]?? "idhandler",
