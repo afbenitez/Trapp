@@ -18,6 +18,7 @@ class AddTrip extends StatefulWidget {
 class _AddTripState extends State<AddTrip> {
   List<Plan> plans = [];
   final user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +40,13 @@ class _AddTripState extends State<AddTrip> {
         child: ListView.builder(
           itemCount: plans.length,
           itemBuilder: (BuildContext context, int index) {
-            return Neumorphic(
+            return NeumorphicButton(
+              onPressed: (){
+                List newTrips = plans[index].trips;
+                newTrips.add(widget.trip.toJSONEncodable());
+                PlanService().updatePlanData(plans[index].id, newTrips);
+                Navigator.of(context).pop(widget.trip.name);
+              },
                 style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
                 ),
