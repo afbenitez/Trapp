@@ -411,8 +411,12 @@ class PlaceCard extends StatelessWidget {
           // ScaffoldMessenger.of(context).showSnackBar(
           //   SnackBar(content: Text("You have pressed ${place.img}")),
           // );
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TabMenu(place: place,) ));
+          
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TabMenu(place: place,) )).then((value) =>
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Succesfully added trip $value")),
+              )
+          );
         },
         child: SizedBox(
           width: 155,
