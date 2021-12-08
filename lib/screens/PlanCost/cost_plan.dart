@@ -9,6 +9,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/plan.dart';
+import 'package:trapp_flutter/screens/PlanCost/plan_cost_detail.dart';
 
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/services/plans_service.dart';
@@ -106,27 +107,33 @@ class _PlansListState extends State<PlansList>{
     
     bool isSwitched = true;
 
-
     if (!internetStatus)
+
       return const NoCostPlanInternet();
     else {
       return ListView.builder(
         itemCount: plans.length,
         itemBuilder: (context, index) {
-
-            return Card(
-              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              color: const Color(0xFFC7E7E9),
-              child:  ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xffEEEEEE),
-                  backgroundImage: AssetImage("assets/logo.png"),
-                  radius: 23.0,
+            return InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    PlanCostDetail(plan: plans[index],),
                 ),
-                title: Text(plans[index].name),
+                );
+              },
+              child: Card(
+                margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                color: const Color(0xFFC7E7E9),
+                child:  ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xffEEEEEE),
+                    backgroundImage: AssetImage("assets/logo.png"),
+                    radius: 23.0,
+                  ),
+                  title: Text(plans[index].name),
+                ),
               ),
             );
-
 
         },
       );
