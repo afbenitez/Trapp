@@ -27,14 +27,11 @@ class PlanService {
   }
 
   //To call this method is executed: await PlanService().updateTripData(tid, name)
-  Future updatePlanData(String pid, String name) async {
+  Future updatePlanData(String pid, List trips) async {
     return plansCollection
       ..doc(pid).set({
-        'attr1': 1,
-        'attr2': '2',
-        'attr3': 3,
-        'attr4': name,
-      });
+        'trips': trips,
+      }, SetOptions(merge: true));
   }
 
   Future<List<Plan>> getPlansList() async {
@@ -62,7 +59,8 @@ class PlanService {
   }
 
   Future<List<Plan>> getPlansListByUser(String uid) async {
-    QuerySnapshot qs = await plansCollection.where('user', isEqualTo: uid).get();
+    QuerySnapshot qs =
+        await plansCollection.where('user', isEqualTo: uid).get();
     // print('trying to acced plans');
     // qs.docs.forEach((element) {print(element.data());});
     return qs.docs.map((p) {

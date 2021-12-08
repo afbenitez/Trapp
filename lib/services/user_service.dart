@@ -60,6 +60,7 @@ class UserService {
     uid = getUser!.uid;
     var document =
     FirebaseFirestore.instance.collection('users').doc(uid);
+    return
     document.get().then((u) {
       name = u.get('firstName');
       lastName = u.get('lastName');
@@ -68,6 +69,24 @@ class UserService {
       birthday = u.get('birthday');
       gender = u.get('gender');
       dailyExpenses = u.get('dailyExpenses');
-    });
+    }).toString();
+  }
+
+  Future getUserBirthday() async {
+    User? getUser = FirebaseAuth.instance.currentUser;
+    uid = getUser!.uid;
+    var document =
+    FirebaseFirestore.instance.collection('users').doc(uid);
+      document.get().then((u) {
+        name = u.get('firstName');
+        lastName = u.get('lastName');
+        email = u.get('email');
+        phone = u.get('phone');
+        birthday = u.get('birthday');
+        gender = u.get('gender');
+        dailyExpenses = u.get('dailyExpenses');
+      });
+
+      return birthday;
   }
 }
