@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trapp_flutter/models/trip.dart';
+import 'package:trapp_flutter/screens/Trips/add_trip_to_plan.dart';
+import 'package:trapp_flutter/services/plans_service.dart';
 
 class TripDetail extends StatelessWidget {
   const TripDetail({Key? key, required this.trip}) : super(key: key);
@@ -106,10 +108,10 @@ class TripDetail extends StatelessWidget {
               ElevatedButton(
                   onPressed: (){
                     updatePlansMario(trip.price);
-
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddTrip(trip: trip)));
                   },
                   child: Text(
-                    'Select',
+                    'Add to a plan!',
                     style: TextStyle(
                       fontSize: size/10,
                       fontFamily: 'thaRegular',

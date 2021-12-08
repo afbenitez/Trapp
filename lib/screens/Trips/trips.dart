@@ -474,9 +474,6 @@ class TripCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("You have pressed ${trip.destination}")),
-          );
           Navigator.push(context, MaterialPageRoute(builder: (context) =>
               TripDetail(trip: trip,),
           ),
