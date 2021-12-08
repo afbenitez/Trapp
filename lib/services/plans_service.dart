@@ -8,6 +8,24 @@ class PlanService {
   final CollectionReference plansCollection =
       FirebaseFirestore.instance.collection('plans_trips');
 
+  List<Plan> _plansListFromSnapshot(QuerySnapshot snapshot) {
+    return  snapshot.docs.map((doc) {
+      return Plan(
+        id: doc.id,
+        name: doc['name'] ?? '',
+        user_id: doc["user_id"]?? '',
+        city_name: doc["city_name"] ?? '',
+        img: doc["img"] ?? '',
+        trips: doc["trips"]?? [],
+        reviews: doc["reviews"] ?? "",
+        price: doc["price"] ?? 0,
+      );
+    }).toList();
+  }
+  Stream<List<Plan>> get plans {
+    return  plansCollection.snapshots().map(_plansListFromSnapshot);
+  }
+
   //To call this method is executed: await PlanService().updateTripData(tid, name)
   Future updatePlanData(String pid, String name) async {
     return plansCollection

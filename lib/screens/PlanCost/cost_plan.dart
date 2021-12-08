@@ -8,10 +8,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:trapp_flutter/models/connectivity.dart';
-import 'package:trapp_flutter/models/item.dart';
+import 'package:trapp_flutter/models/plan.dart';
+
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
+import 'package:trapp_flutter/services/plans_service.dart';
 import 'package:trapp_flutter/services/user_service.dart';
-import 'package:trapp_flutter/services/item_s.dart';
+
 
 import 'no_cost_plan_internet.dart';
 
@@ -22,30 +24,30 @@ class costPlan extends StatelessWidget {
   const costPlan({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Item>>.value(
-      value: ItemService().items,
+    return StreamProvider<List<Plan>>.value(
+      value: PlanService().plans,
       initialData: [],
       child: Scaffold(
         backgroundColor: const Color(0xffEEEEEE),
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Suggested Items'),
+          title: Text('Estimated cost for the plans'),
           backgroundColor: const Color(0xff00AFB9),
           elevation: 0.0,
         ),
-        body: Container(child: ItemsList()),
+        body: Container(child: PlansList()),
       ),
     );
   }
 }
 
-class ItemsList extends StatefulWidget {
+class PlansList extends StatefulWidget {
   @override
-  _ItemsListState createState() => _ItemsListState();
+  _PlansListState createState() => _PlansListState();
 }
 
 
-class _ItemsListState extends State<ItemsList>{
+class _PlansListState extends State<PlansList>{
 
   var connection = false;
   OverlayEntry? entry;
@@ -60,7 +62,7 @@ class _ItemsListState extends State<ItemsList>{
 
   bool internetStatus = false;
 
-  List<Item> items = [];
+  List<Plan> plans = [];
 
 
   @override
@@ -82,12 +84,9 @@ class _ItemsListState extends State<ItemsList>{
     });
     super.initState();
      if (!internetStatus) {
-
-       ItemService().getItems().then((ts) {
+       PlanService().getPlansList().then((value) {
          setState(() {
-
-
-           items = ts!;
+           plans = value;
          });
        });
      }
@@ -103,56 +102,32 @@ class _ItemsListState extends State<ItemsList>{
   Widget build(BuildContext context)  {
     myTrace.stop();
     UserService us = UserService(uid: '');
-    us.setTimeLoadingTime('Items', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
-
-    final items = Provider.of<List<Item>>(context);
+    us.setTimeLoadingTime('Plans', (DateTime.now().millisecondsSinceEpoch - start) / 1000);
+    
     bool isSwitched = true;
+
 
     if (!internetStatus)
       return const NoCostPlanInternet();
     else {
       return ListView.builder(
-        itemCount: items.length,
+        itemCount: plans.length,
         itemBuilder: (context, index) {
-          if (index <= 10) {
+
             return Card(
               margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              color: const Color(0xffEDD83D),
+              color: const Color(0xFFC7E7E9),
               child:  ListTile(
                 leading: CircleAvatar(
                   backgroundColor: const Color(0xffEEEEEE),
                   backgroundImage: AssetImage("assets/logo.png"),
                   radius: 23.0,
                 ),
-                title: Text(items[index].name),
+                title: Text(plans[index].name),
               ),
             );
-          }
 
-          else {
-            return Card(
-              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              color: const Color(0xff00AFB9),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xffEEEEEE),
-                  backgroundImage: AssetImage("assets/logo.png"),
-                  radius: 23.0,
-                ),
-                title: Text(items[index].name),
-                trailing: new Switch(
-                  value: false,
-                  activeColor: Colors.yellow,
-                  activeTrackColor: Colors.yellowAccent,
-                  onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                  },
-                ),
-              ),
-            );
-          }
+
         },
       );
     }

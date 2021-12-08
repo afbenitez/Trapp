@@ -230,38 +230,6 @@ class _LoadingTripsState extends State<LoadingTrips> {
                         )
                       ],
                     ),
-<<<<<<< HEAD
-                  ),
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/logoTrapp.png'),
-                    backgroundColor: Colors.transparent,
-                    radius: 20,
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Neumorphic(
-                      style: NeumorphicStyle(
-                          depth: -8,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(20))),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            keyWordFilter = value;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          // border: OutlineInputBorder(),
-                          // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                            icon: Padding(
-                                padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                child: Icon(Icons.explore)),
-                            hintText: 'Search'),
-=======
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -278,8 +246,8 @@ class _LoadingTripsState extends State<LoadingTrips> {
                                 });
                               },
                               decoration: const InputDecoration(
-                                  // border: OutlineInputBorder(),
-                                  // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                // border: OutlineInputBorder(),
+                                // contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                   icon: Padding(
                                       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                       child: Icon(Icons.explore)),
@@ -305,16 +273,16 @@ class _LoadingTripsState extends State<LoadingTrips> {
                         const Text(" \u00240"),
                         Expanded(
                             child: Slider(
-                          onChanged: (double value) {
-                            setState(() {
-                              budget = value;
-                            });
-                          },
-                          divisions: 5,
-                          max: 100000000,
-                          min: 0,
-                          value: budget,
-                        )),
+                              onChanged: (double value) {
+                                setState(() {
+                                  budget = value;
+                                });
+                              },
+                              divisions: 5,
+                              max: 100000000,
+                              min: 0,
+                              value: budget,
+                            )),
                         Text('\u0024${(budget / 1000).floor()}k'),
                         const SizedBox(
                           width: 10,
@@ -332,7 +300,6 @@ class _LoadingTripsState extends State<LoadingTrips> {
                       style: TextStyle(
                         fontFamily: 'thaBold',
                         fontSize: 25,
->>>>>>> e1ad7018df8b7519cee1cad9465753e5aadfcde3
                       ),
                     ),
                     const Divider(
@@ -343,24 +310,24 @@ class _LoadingTripsState extends State<LoadingTrips> {
                       child: !internetStatus
                           ? const NoTripsInternet()
                           : trips.isEmpty
-                              ? const SpinKitWave(
-                                  // SpinningLines(
-                                  color: Color(0xFF00AFB9),
-                                  size: 90.0,
-                                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: affordableActivities.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child:
-                                          TripCard(trip: affordableActivities[index]),
-                                    );
-                                  },
-                                ),
+                          ? const SpinKitWave(
+                        // SpinningLines(
+                        color: Color(0xFF00AFB9),
+                        size: 90.0,
+                        // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                      )
+                          : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: affordableActivities.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child:
+                            TripCard(trip: affordableActivities[index]),
+                          );
+                        },
+                      ),
                     ),
                     const Divider(
                       height: 15,
@@ -378,23 +345,23 @@ class _LoadingTripsState extends State<LoadingTrips> {
                     SizedBox(
                       height: 200,
                       child: places.isEmpty
-                              ? const SpinKitWave(
-                                  // SpinningLines(
-                                  color: Color(0xFF00AFB9),
-                                  size: 90.0,
-                                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: closePlaces.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: PlaceCard(place: closePlaces[index]),
-                                    );
-                                  },
-                                ),
+                          ? const SpinKitWave(
+                        // SpinningLines(
+                        color: Color(0xFF00AFB9),
+                        size: 90.0,
+                        // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
+                      )
+                          : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: closePlaces.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PlaceCard(place: closePlaces[index]),
+                          );
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
@@ -407,118 +374,22 @@ class _LoadingTripsState extends State<LoadingTrips> {
             right: 25,
             child: NeumorphicButton(
               style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
-                color: const Color(0xFFfab805)
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
+                  color: const Color(0xFFfab805)
               ),
-<<<<<<< HEAD
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(" \u00240"),
-                  Expanded(
-                      child: Slider(
-                        onChanged: (double value) {
-                          setState(() {
-                            budget = value;
-                          });
-                        },
-                        divisions: 5,
-                        max: 100000000,
-                        min: 0,
-                        value: budget,
-                      )),
-                  Text('\u0024${(budget / 1000).floor()}k'),
-                  const SizedBox(
-=======
               onPressed: (){},
               child: Row(
                 children: const [
                   Text('Plan'),
                   SizedBox(
->>>>>>> e1ad7018df8b7519cee1cad9465753e5aadfcde3
                     width: 10,
                   ),
                   Icon(Icons.add_circle),
                 ],
               ),
-<<<<<<< HEAD
-              const Text(
-                'For your budget',
-                style: TextStyle(
-                  fontFamily: 'thaBold',
-                  fontSize: 25,
-                ),
-              ),
-              const Divider(
-                height: 15,
-              ),
-              SizedBox(
-                height: !internetStatus || trips.isEmpty ? 120 : 225,
-                child: !internetStatus
-                    ? const NoTripsInternet()
-                    : trips.isEmpty
-                    ? const SpinKitWave(
-                  // SpinningLines(
-                  color: Color(0xFF00AFB9),
-                  size: 90.0,
-                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                )
-                    : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: affordableActivities.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child:
-                      TripCard(trip: affordableActivities[index]),
-                    );
-                  },
-                ),
-              ),
-              const Divider(
-                height: 15,
-              ),
-              const Text(
-                'Places near to you',
-                style: TextStyle(
-                  fontFamily: 'thaBold',
-                  fontSize: 25,
-                ),
-              ),
-              const Divider(
-                height: 15,
-              ),
-              SizedBox(
-                height: 225,
-                child: places.isEmpty
-                    ? const SpinKitWave(
-                  // SpinningLines(
-                  color: Color(0xFF00AFB9),
-                  size: 90.0,
-                  // controller: AnimationController( duration: const Duration(milliseconds: 1200)),
-                )
-                    : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: closePlaces.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: PlaceCard(place: closePlaces[index]),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ]),
-=======
             ),
           ),
         ],
->>>>>>> e1ad7018df8b7519cee1cad9465753e5aadfcde3
       ),
     );
   }
@@ -540,7 +411,7 @@ class PlaceCard extends StatelessWidget {
           // ScaffoldMessenger.of(context).showSnackBar(
           //   SnackBar(content: Text("You have pressed ${place.img}")),
           // );
-          
+
           Navigator.push(context, MaterialPageRoute(builder: (context) => TabMenu(place: place,) ));
         },
         child: SizedBox(

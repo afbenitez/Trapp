@@ -17,8 +17,6 @@ import 'package:trapp_flutter/services/item_s.dart';
 import 'no_items_internet.dart';
 
 
-
-
 class AllItems extends StatelessWidget {
   const AllItems({Key? key}) : super(key: key);
   @override
@@ -86,7 +84,6 @@ class _ItemsListState extends State<ItemsList>{
 
        ItemService().getItems().then((ts) {
          setState(() {
-
 
            items = ts!;
          });
