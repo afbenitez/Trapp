@@ -10,6 +10,7 @@ class Place {
   final String address;
   final double latitude;
   final double longitude;
+  final List   reviews;
 
   Place({
     required this.id,
@@ -18,6 +19,7 @@ class Place {
     required this.address,
     required this.latitude,
     required this.longitude,
+    required this.reviews,
   });
 
   double distance( double lat, double lng){
@@ -46,6 +48,7 @@ class Place {
     m['address'] = address;
     m['latitude'] = latitude;
     m['longitude'] = longitude;
+    m['reviews'] = reviews;
 
     return m;
   }
@@ -58,6 +61,7 @@ class Place {
       address: data["address"] ?? "",
       latitude: data["latitude"] ?? 0,
       longitude: data["longitude"] ?? 0,
+      reviews: data["reviews"] ?? List.empty()
     );
   }
 }

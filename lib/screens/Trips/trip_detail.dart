@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trapp_flutter/models/trip.dart';
+import 'package:trapp_flutter/screens/Trips/add_trip_to_plan.dart';
+import 'package:trapp_flutter/services/plans_service.dart';
 
 class TripDetail extends StatelessWidget {
   const TripDetail({Key? key, required this.trip}) : super(key: key);
@@ -10,9 +12,7 @@ class TripDetail extends StatelessWidget {
 
   getDestination(){
     CollectionReference cities = FirebaseFirestore.instance.collection('cities');
-
-    print('hola ${trip.destination}');
-
+    // print('hola ${trip.destination}');
   }
 
   @override
@@ -21,7 +21,7 @@ class TripDetail extends StatelessWidget {
     double size = MediaQuery.of(context).size.height/3;
     int idPlan = 101;
     return Container(
-      color: Color(0xFFC7E7E9),
+      color: const Color(0xFFC7E7E9),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
           child: Column(
@@ -108,10 +108,10 @@ class TripDetail extends StatelessWidget {
               ElevatedButton(
                   onPressed: (){
                     updatePlansMario(trip.price);
-
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddTrip(trip: trip)));
                   },
                   child: Text(
-                    'Select',
+                    'Add to a plan!',
                     style: TextStyle(
                       fontSize: size/10,
                       fontFamily: 'thaRegular',
@@ -126,12 +126,12 @@ class TripDetail extends StatelessWidget {
 
   Future<void> updatePlansMario(int price) async{
     int idPlan=0;
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now();
     CollectionReference plans = FirebaseFirestore.instance.collection('plansMario');
     plans.get().then((value) async {
-      print('valor actual ${value.docs.length}');
+      // print('valor actual ${value.docs.length}');
       idPlan = value.docs.length+1;
-      print(idPlan);
+      // print(idPlan);
       return await plans.doc('plan_$idPlan').set({
         'active': true,
         'activities': [44, 60, 70, 80],

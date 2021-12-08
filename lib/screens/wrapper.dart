@@ -5,16 +5,15 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:trapp_flutter/models/connectivity.dart';
 import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/screens/Trips/trips.dart';
-// import 'package:trapp_flutter/screens/authentication/sign_in_2.dart';
 import 'package:trapp_flutter/screens/budget/budget.dart';
-import 'package:trapp_flutter/screens/connectivity/message.dart';
 import 'package:trapp_flutter/screens/connectivity/no_internet.dart';
 import 'package:trapp_flutter/screens/home/home_2.dart';
 import 'package:trapp_flutter/screens/item/items.dart';
+import 'package:trapp_flutter/screens/profile/profile.dart';
 import 'package:trapp_flutter/screens/settings/settings.dart';
 
 import 'PlanCost/cost_plan.dart';
@@ -22,11 +21,12 @@ import 'PlanCost/cost_plan.dart';
 class Wrapper extends StatelessWidget {
 
   const Wrapper({Key? key}) : super(key: key);
+  // LocalStorage storage = LocalStorage('trapp_storage');
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User_fb?>(context);
-    print("nana ${user?.uid}");
+    // print("nana ${user?.uid}");
     return (user == null) ? const Home() : const MyStatefulWidget();
   }
 }
@@ -70,7 +70,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
     NoInternet(),
     AllItems(),
     Settings(),
-    NoInternet(),
+    Profile(),
   ];
 
   void _onItemTapped(int index) {
@@ -121,7 +121,7 @@ class NavItem extends StatelessWidget {
         },
         icon: Icon(
           icon,
-          size: 30,
+          size: 25,
           color: Colors.white,
         ),
       ),
@@ -132,7 +132,7 @@ class NavItem extends StatelessWidget {
         },
         icon: Icon(
           icon,
-          size: 30,
+          size: 25,
           color: Colors.white,
         )
     );
@@ -149,14 +149,14 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
       child: Neumorphic(
           style: NeumorphicStyle(
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
             color: const Color(0xFF00AFB9),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
