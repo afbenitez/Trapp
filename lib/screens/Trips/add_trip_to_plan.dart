@@ -1,52 +1,69 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:trapp_flutter/models/plan.dart';
 import 'package:trapp_flutter/models/trip.dart';
-import 'package:trapp_flutter/models/user_fb.dart';
 import 'package:trapp_flutter/services/plans_service.dart';
 
 class AddTrip extends StatefulWidget {
-  AddTrip({Key? key, required this.trip}) : super(key: key);
+  const AddTrip({Key? key, required this.trip}) : super(key: key);
 
   final Trip trip;
-
-  LocalStorage storage = LocalStorage('trapp_storage');
 
   @override
   _AddTripState createState() => _AddTripState();
 }
 
 class _AddTripState extends State<AddTrip> {
-
   List<Plan> plans = [];
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    // final user = Provider.of<User_fb?>(context);
-    PlanService().getPlansList().then((value){
+    super.initState();
+    PlanService().getPlansListByUser(user!.uid).then((value) {
       setState(() {
         plans = value;
       });
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: const Text('Add the trip to your plan!'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(8,8,8,0),
         child: ListView.builder(
           itemCount: plans.length,
           itemBuilder: (BuildContext context, int index) {
-            return Center(
-              child: Text('trying: ${plans[index].name}'),
-            );
+            return Neumorphic(
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+                ),
+                child: IntrinsicWidth(
+                    child: SizedBox(
+                      height: 55,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(plans[index].name),
+                            const Divider(
+                              height: 5,
+                            ),
+                            Text('Price: ${plans[index].price}'),
+                          ],
+                        ),
+                      ),
+                    ),
+                ),
+              );
           },
         ),
       ),
     );
   }
 }
-
