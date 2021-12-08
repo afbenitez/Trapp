@@ -15,7 +15,7 @@
 
     @override
     Widget build(BuildContext context) {
-      int costoTotal = 0;
+
       return  Scaffold(
 
           backgroundColor: const Color(0xffEEEEEE),
@@ -29,7 +29,6 @@
                   itemCount: plan.trips.length,
                   itemBuilder: (context, index) {
                     int x = plan.trips[index]['price'];
-                    costoTotal += x;
                     return  Card(
                         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
                         child:  ListTile(
