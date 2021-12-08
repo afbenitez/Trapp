@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class User_fb {
   // This is the user id provided by auth
   final String uid;
